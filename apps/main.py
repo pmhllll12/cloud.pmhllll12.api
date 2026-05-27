@@ -12,9 +12,7 @@ from contextlib import asynccontextmanager
 from typing import Any
 
 from fastapi import Depends, FastAPI, HTTPException, Request
-from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -24,8 +22,8 @@ from adapters.weather_adapter import fetch_seoul_weather
 from database import dispose_engine, get_db
 from doro.app.doro_director import DoroDirector
 from matrix.app.keymaker import MissingApiKeyError, format_gemini_error, keymaker
-from titanic.app.controllers.titanic_controller import TitanicController
-from titanic.schemas import TitanicDatasetSchemaHint, TitanicProblemDefinition
+from titanic.adapter.inbound.api.V1.titanic_command_router import router as titanic_command_router
+from titanic.adapter.inbound.api.V1.titanic_query_router import router as titanic_query_router
 from secom.app.controllers.user_controller import UserController, register_secom_routes
 from secom.app.repositories.user_repository import UserRepository
 from secom.schemas.user_schemas import UserSchemas
@@ -35,6 +33,8 @@ from logging_config import get_uvicorn_log_config, setup_app_logging
 setup_app_logging()
 logger = logging.getLogger(__name__)
 API_PORT = int(os.getenv("API_PORT", "8000"))
+# 폰·다른 PC에서 `http://<이_PC_LAN_IP>:8000` 으로 직접 호출할 때는 0.0.0.0 (보안: 신뢰 네트워크에서만)
+API_HOST = os.getenv("API_HOST", "127.0.0.1").strip() or "127.0.0.1"
 _SIGNUP_EMAIL_RE = re.compile(r"^[^\s@]+@[^\s@]+\.[^\s@]+$")
 
 
@@ -135,6 +135,9 @@ app.add_middleware(
 )
 
 register_secom_routes(app)
+
+app.include_router(titanic_query_router, prefix="/titanic", tags=["titanic"])
+app.include_router(titanic_command_router, prefix="/titanic", tags=["titanic"])
 
 
 @app.middleware("http")
@@ -304,46 +307,6 @@ async def check_db(db: AsyncSession = Depends(get_db)):
     return await DbHealthAdapter.neon_time_check(db)
 
 
-@app.get("/titanic/problem")
-def read_titanic_problem() -> dict[str, object]:
-    """문제 정의·컬럼 설명(교육·수업용)."""
-    return {
-        "problem": TitanicProblemDefinition().model_dump(),
-        "schema_hint": TitanicDatasetSchemaHint().model_dump(),
-    }
-
-
-@app.get("/titanic/data")
-def read_titanic_data():
-    ctrl = TitanicController()
-    df = ctrl.get_data()
-
-    return df.to_dict(orient="records")
-
-
-@app.get("/titanic/count")
-def read_titanic_count():
-    ctrl = TitanicController()
-    count = ctrl.get_count()
-
-    return {"count": count}
-
-
-@app.get("/titanic/tree")
-def read_titanic_tree():
-    ctrl = TitanicController()
-    tree = ctrl.has_decision_tree_model()
-
-    return {"tree": tree}
-
-
-@app.get("/titanic/model")
-def read_titanic_model():
-    ctrl = TitanicController()
-    model_name = ctrl.get_model_name_and_accuracy()
-    return JSONResponse(content=jsonable_encoder(model_name))
-
-
 @app.get("/doro/data")
 def read_doro_data():
     doro_director = DoroDirector()
@@ -371,7 +334,7 @@ if __name__ == "__main__":
         )
     uvicorn.run(
         "main:app",
-        host="127.0.0.1",
+        host=API_HOST,
         port=API_PORT,
         reload=use_reload,
         log_level="info",

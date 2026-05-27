@@ -47,8 +47,8 @@ class TitanicDatasetSchemaHint(BaseModel):
         ]
     )
     notes: str = (
-        "실습용으로 `titanic/data/titanic.csv` 일부를 둡니다. "
-        "전체 Kaggle train.csv로 바꿔도 동일 스키마면 동작합니다."
+        "API는 저장소 내부 CSV 없이 메모리 데모 프레임으로 동일 스키마를 안내합니다. "
+        "실제 수업 데이터는 업로드·DB 등 외부 소스에서 연동하세요."
     )
 
 
