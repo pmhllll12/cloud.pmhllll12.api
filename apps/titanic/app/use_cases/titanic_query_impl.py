@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from titanic.app.ports.input.titanic_query_port import TitanicQueryPort
-from titanic.app.use_cases.titanic_service import TitanicService
+from titanic.app.use_cases.train_use_case import TitanicService
 from titanic.schemas import TitanicDatasetSchemaHint, TitanicProblemDefinition
 
 

@@ -16,6 +16,16 @@ _APP_LOGGER_NAMES = (
     "secom.app.controllers.user_controller",
     "secom.app.services.user_service",
     "secom.app.repositories.user_repository",
+    "titanic",
+    "titanic.adapter.inbound.api.V1.james_router",
+    "titanic.adapter.inbound.api.V1.walter_router",
+    "titanic.adapter.outbound.pg.james_pg_repository",
+    "titanic.adapter.outbound.pg.walter_pg_repository",
+    "titanic.app.ports.input.walter_use_case",
+    "titanic.app.ports.output.walter_repository",
+    "titanic.app.use_cases.james_command",
+    "titanic.app.use_cases.walter_command",
+    "titanic.app.use_cases.walter_query",
 )
 
 

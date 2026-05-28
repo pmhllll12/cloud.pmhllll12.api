@@ -1,23 +1,10 @@
-from fastapi import FastAPI
+"""Doro 데이터 디렉터 (스텁 — `/doro/data` 용)."""
 
-from doro.app.doro_reader import DoroReader
+from __future__ import annotations
 
-
-app = FastAPI(title="DoroDirector")
+import pandas as pd
 
 
 class DoroDirector:
-    def __init__(self):
-        pass
-
-
-    def get_data(self):
-        dr = DoroReader()
-        return dr.get_data()
-
-
-
-
-
-
-
+    def get_data(self) -> pd.DataFrame:
+        return pd.DataFrame()

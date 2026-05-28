@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from titanic.adapter.inbound.schemas.titanic_request import TitanicPassengerRowRequest
-from titanic.adapter.inbound.schemas.titanic_response import TitanicCommandResponse
+from titanic.adapter.inbound.api.schemas.titanic_request import TitanicPassengerRowRequest
+from titanic.adapter.inbound.api.schemas.titanic_response import TitanicCommandResponse
 from titanic.app.ports.input.titanic_command_port import TitanicCommandPort
 
 
