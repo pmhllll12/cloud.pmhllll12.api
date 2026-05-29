@@ -34,7 +34,8 @@ async def _run(csv_path: Path) -> None:
     from database import AsyncSessionLocal, create_all_tables, engine
     from friday13th.app.bootstrap import init_secom_db
     from titanic.adapter.outbound.pg.james_pg_repository import JamesPgRepository
-    from titanic.app.use_cases.james_command import JamesCommand
+    from titanic.app.ports.input.james_use_case import JamesUploadInput
+    from titanic.app.use_cases.james_command import JamesCommand, james_repository_ctx
 
     if engine is None or AsyncSessionLocal is None:
         raise SystemExit(
@@ -49,8 +50,15 @@ async def _run(csv_path: Path) -> None:
     filename = csv_path.name
 
     async with AsyncSessionLocal() as session:
-        command = JamesCommand(repository=JamesPgRepository(session))
-        result = await command.upload_titanic_csv(content, filename)
+        repo = JamesPgRepository(session=session)
+        token = james_repository_ctx.set(repo)
+        try:
+            command = JamesCommand()
+            result = await command.receive_uploaded_records(
+                JamesUploadInput(content=content, filename=filename)
+            )
+        finally:
+            james_repository_ctx.reset(token)
 
     print(f"OK - {result.message}")
     print(f"file: {result.filename}, rows: {result.row_count}")

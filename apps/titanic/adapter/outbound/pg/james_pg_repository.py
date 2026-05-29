@@ -32,30 +32,25 @@ class JamesPgRepository(JamesRepositoryPort):
         if not rows:
             return 0
 
-        logger.info(
-            "[JamesPgRepository] Neon DB 저장 시작 — filename=%s rows=%s",
-            filename,
-            len(rows),
-        )
-
         try:
             await self._session.execute(delete(JamesPassenger))
             self._session.add_all(
                 JamesPassenger.from_record(filename, row) for row in rows
             )
-            # commit() 시점에 Neon PostgreSQL 로 실제 전송·저장
             await self._session.commit()
         except SQLAlchemyError as exc:
             await self._session.rollback()
             logger.exception("Neon DB 전송 실패: %s", exc)
             raise ValueError(f"Neon DB 저장에 실패했습니다: {exc}") from exc
 
+        n = len(rows)
         logger.info(
-            "[JamesPgRepository] Neon DB commit 완료 — titanic_james_passengers 에 %s행 저장됨 (filename=%s)",
-            len(rows),
+            "[JamesPgRepository] 아웃바운드 — Neon `titanic_james_passengers` 저장·commit 완료 "
+            "filename=%s rows=%s",
             filename,
+            n,
         )
-        return len(rows)
+        return n
 
     async def fetch_page(
         self,

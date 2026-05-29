@@ -15,6 +15,18 @@ if _backend_str not in sys.path:
 if _apps_str not in sys.path:
     sys.path.append(_apps_str)
 
+# Windows: NumPy/BLAS·MKL 이 기본 멀티스레드일 때 일부 환경에서 프로세스가 네이티브 크래시로
+# 종료되는 경우가 있어, pandas/numpy 로드 전에 스레드 수를 1로 제한합니다.
+if sys.platform == "win32":
+    for _k in (
+        "OMP_NUM_THREADS",
+        "OPENBLAS_NUM_THREADS",
+        "MKL_NUM_THREADS",
+        "NUMEXPR_NUM_THREADS",
+        "VECLIB_MAXIMUM_THREADS",
+    ):
+        os.environ.setdefault(_k, "1")
+
 from _import_aliases import install_secom_aliases  # noqa: E402
 
 install_secom_aliases()

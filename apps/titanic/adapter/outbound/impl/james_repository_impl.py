@@ -26,6 +26,22 @@ class JamesRepositoryImpl(JamesRepositoryPort):
         }
         return len(rows)
 
+    async def fetch_page(
+        self,
+        *,
+        page: int,
+        page_size: int,
+    ) -> tuple[list[dict[str, Any]], int]:
+        if JamesRepositoryImpl._latest is None:
+            return [], 0
+        rows = JamesRepositoryImpl._latest.get("rows") or []
+        if not isinstance(rows, list):
+            return [], 0
+        total = len(rows)
+        start = (page - 1) * page_size
+        chunk = rows[start : start + page_size]
+        return chunk, total
+
     @classmethod
     def get_latest(cls) -> dict[str, Any] | None:
         return cls._latest

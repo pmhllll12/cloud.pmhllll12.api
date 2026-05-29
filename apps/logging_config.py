@@ -28,6 +28,12 @@ _APP_LOGGER_NAMES = (
     "titanic.app.use_cases.walter_query",
 )
 
+# 포트 모듈은 얇은 경계만 두고 INFO 로그를 남기지 않음 (필요 시 WARNING 이상만).
+_QUIET_TITANIC_PORT_LOGGERS = (
+    "titanic.app.ports.input.james_use_case",
+    "titanic.app.ports.output.james_repository",
+)
+
 
 def setup_app_logging() -> None:
     logging.basicConfig(
@@ -42,6 +48,8 @@ def setup_app_logging() -> None:
         log = logging.getLogger(name)
         log.setLevel(logging.INFO)
         log.propagate = True
+    for name in _QUIET_TITANIC_PORT_LOGGERS:
+        logging.getLogger(name).setLevel(logging.WARNING)
     for sql_name in ("sqlalchemy.engine", "sqlalchemy.pool", "sqlalchemy.orm"):
         logging.getLogger(sql_name).setLevel(logging.WARNING)
 
@@ -55,6 +63,8 @@ def get_uvicorn_log_config() -> dict[str, Any]:
     }
     for name in _APP_LOGGER_NAMES:
         loggers[name] = {"level": "INFO"}
+    for name in _QUIET_TITANIC_PORT_LOGGERS:
+        loggers[name] = {"level": "WARNING"}
 
     return {
         "version": 1,

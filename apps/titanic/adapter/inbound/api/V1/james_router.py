@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+from collections.abc import AsyncIterator
 from typing import Annotated
 
 import math
@@ -16,8 +17,8 @@ from titanic.adapter.inbound.api.schemas.james_passengers_response import (
 )
 from titanic.adapter.inbound.api.schemas.james_response import JamesUploadResponse
 from titanic.adapter.outbound.pg.james_pg_repository import JamesPgRepository
-from titanic.app.ports.input.james_use_case import JamesUseCasePort
-from titanic.app.use_cases.james_command import JamesCommand
+from titanic.app.ports.input.james_use_case import JamesUseCasePort, submit_csv_upload
+from titanic.app.use_cases.james_command import JamesCommand, james_repository_ctx
 
 logger = logging.getLogger(__name__)
 
@@ -32,9 +33,12 @@ async def get_james_repository(
 
 async def get_james_use_case_port(
     repository: Annotated[JamesPgRepository, Depends(get_james_repository)],
-) -> JamesUseCasePort:
-    """④ 아웃바운드: Neon 세션을 James PG 레포지토리에 주입."""
-    return JamesCommand(repository=repository)
+) -> AsyncIterator[JamesUseCasePort]:
+    token = james_repository_ctx.set(repository)
+    try:
+        yield JamesCommand()
+    finally:
+        james_repository_ctx.reset(token)
 
 
 @james_router.post("/upload", response_model=JamesUploadResponse)
@@ -48,14 +52,9 @@ async def upload_titanic_csv(
         raise HTTPException(status_code=400, detail="CSV 파일만 업로드할 수 있습니다.")
 
     content = await file.read()
-    logger.info(
-        "[james_router] CSV 수신 — path=/titanic/james/upload filename=%s bytes=%s",
-        filename,
-        len(content),
-    )
 
     try:
-        result = await port.upload_titanic_csv(content, filename)
+        result = await submit_csv_upload(port, content=content, filename=filename)
     except ValueError as exc:
         logger.warning(
             "[james_router] Neon DB 저장 실패 — filename=%s reason=%s",
@@ -65,10 +64,9 @@ async def upload_titanic_csv(
         raise HTTPException(status_code=400, detail=str(exc)) from exc
 
     logger.info(
-        "[james_router] Neon DB로 이동 완료 — filename=%s rows=%s columns=%s",
+        "[james_router] 인바운드 — POST /titanic/james/upload 완료 filename=%s rows=%s",
         result.filename,
         result.row_count,
-        ", ".join(result.columns),
     )
     return result
 
