@@ -49,13 +49,27 @@ from adapters.weather_adapter import fetch_seoul_weather
 from database import dispose_engine, get_db
 from doro.app.doro_director import DoroDirector
 from matrix.app.keymaker import MissingApiKeyError, format_gemini_error, keymaker
-from titanic.adapter.inbound.api.V1.james_router import james_router
-from titanic.adapter.inbound.api.V1.titanic_query_router import router as titanic_query_router
-from titanic.adapter.inbound.api.V1.walter_router import walter_router
-from secom.app.controllers.user_controller import UserController, register_secom_routes
-from secom.app.repositories.user_repository import UserRepository
-from secom.schemas.user_schemas import UserSchemas
-from secom.app.services.user_service import UserService
+from titanic.adapter.inbound.api import titanic_router
+
+try:
+    from secom.app.controllers.user_controller import UserController, register_secom_routes
+    from secom.app.repositories.user_repository import UserRepository
+    from secom.schemas.user_schemas import UserSchemas
+    from secom.app.services.user_service import UserService
+except ModuleNotFoundError:
+    SECOM_AVAILABLE = False
+
+    def register_secom_routes(app: FastAPI) -> None:  # noqa: ARG001
+        """secom 패키지가 없으면 회원가입·secom 라우트를 등록하지 않습니다."""
+        logger = logging.getLogger(__name__)
+        logger.warning("secom 모듈 없음 — register_secom_routes 생략")
+
+    UserController = None  # type: ignore[assignment, misc]
+    UserRepository = None  # type: ignore[assignment, misc]
+    UserSchemas = None  # type: ignore[assignment, misc]
+    UserService = None  # type: ignore[assignment, misc]
+else:
+    SECOM_AVAILABLE = True
 from logging_config import get_uvicorn_log_config, setup_app_logging
 
 setup_app_logging()
@@ -132,9 +146,12 @@ class SignupResponse(BaseModel):
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     setup_app_logging()
-    from secom.app.bootstrap import init_secom_db
+    if SECOM_AVAILABLE:
+        from secom.app.bootstrap import init_secom_db
 
-    await init_secom_db()
+        await init_secom_db()
+    else:
+        logger.warning("secom 모듈 없음 — init_secom_db 생략")
     logger.info(
         "API 준비 port=%s — docs http://127.0.0.1:%s/docs | ping http://127.0.0.1:%s/ping",
         API_PORT,
@@ -164,9 +181,7 @@ app.add_middleware(
 
 register_secom_routes(app)
 
-app.include_router(titanic_query_router, prefix="/titanic", tags=["titanic"])
-app.include_router(james_router)
-app.include_router(walter_router)
+app.include_router(titanic_router)
 
 
 @app.middleware("http")
@@ -195,6 +210,13 @@ async def signup(
     db: AsyncSession = Depends(get_db),
 ) -> SignupResponse:
     """회원가입 — 검증 후 secom 레이어(controller → service → repository)로 저장합니다."""
+    if not SECOM_AVAILABLE:
+        raise HTTPException(
+            status_code=503,
+            detail="이 설치에는 secom(회원가입) 패키지가 포함되어 있지 않습니다.",
+        )
+    assert UserSchemas is not None
+
     email = body.email.strip()
     if not _SIGNUP_EMAIL_RE.match(email):
         logger.warning(

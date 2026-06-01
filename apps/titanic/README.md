@@ -9,7 +9,7 @@
 | `walter_reader` | `app/use_cases/titanic_dataset_repository.py` (`app/repositories/`는 re-export) |
 | `rose_model` | `app/models/survival_classifier_model.py` |
 | `caledon_validation` | `app/use_cases/titanic_passenger_validator.py` (`app/validators/`는 re-export) |
-| (신규) 스키마·문제정의 | `schemas/titanic_schemas.py` |
+| (신규) 요청 행 스키마 | `schemas/titanic_request.py` (`TitanicPassengerRowRequest`) |
 | 데모 데이터 | `app/demo_data.py` (파일 I/O 없음) |
 
 ## API
