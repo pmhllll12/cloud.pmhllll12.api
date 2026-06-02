@@ -5,7 +5,7 @@ from __future__ import annotations
 from fastapi import APIRouter
 
 smith_captin_router = APIRouter(
-    prefix="/titanic/smith-captin",
+    prefix="/smith-captin",
     tags=["smith-captin"],
 )
 

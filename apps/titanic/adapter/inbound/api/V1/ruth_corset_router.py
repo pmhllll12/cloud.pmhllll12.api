@@ -5,7 +5,7 @@ from __future__ import annotations
 from fastapi import APIRouter
 
 ruth_corset_router = APIRouter(
-    prefix="/titanic/ruth-corset",
+    prefix="/ruth-corset",
     tags=["ruth-corset"],
 )
 

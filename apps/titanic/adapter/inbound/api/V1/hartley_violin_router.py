@@ -5,7 +5,7 @@ from __future__ import annotations
 from fastapi import APIRouter
 
 hartley_violin_router = APIRouter(
-    prefix="/titanic/hartley-violin",
+    prefix="/hartley-violin",
     tags=["hartley-violin"],
 )
 

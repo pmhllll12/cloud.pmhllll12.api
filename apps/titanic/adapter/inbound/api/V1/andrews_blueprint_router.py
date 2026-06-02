@@ -5,7 +5,7 @@ from __future__ import annotations
 from fastapi import APIRouter
 
 andrews_blueprint_router = APIRouter(
-    prefix="/titanic/andrews-blueprint",
+    prefix="/andrews-blueprint",
     tags=["andrews-blueprint"],
 )
 

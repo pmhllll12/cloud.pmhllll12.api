@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from fastapi import APIRouter
 
-jack_sketch_router = APIRouter(prefix="/titanic/jack-sketch", tags=["jack-sketch"])
+jack_sketch_router = APIRouter(prefix="/jack-sketch", tags=["jack-sketch"])
 
 
 @jack_sketch_router.post("/sketch")

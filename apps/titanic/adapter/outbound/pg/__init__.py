@@ -1,3 +1,3 @@
-from titanic.adapter.outbound.pg.james_pg_repository import JamesPgRepository
+from titanic.adapter.outbound.pg.james_director_pg_repository import JamesDirectorPgRepository
 
-__all__ = ["JamesPgRepository"]
+__all__ = ["JamesDirectorPgRepository"]

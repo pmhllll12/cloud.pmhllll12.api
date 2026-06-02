@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from fastapi import APIRouter
 
-isidor_bed_router = APIRouter(prefix="/titanic/isidor-bed", tags=["isidor-bed"])
+isidor_bed_router = APIRouter(prefix="/isidor-bed", tags=["isidor-bed"])
 
 
 @isidor_bed_router.post("/bed")

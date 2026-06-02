@@ -5,7 +5,7 @@ from __future__ import annotations
 from fastapi import APIRouter
 
 rose_diamond_router = APIRouter(
-    prefix="/titanic/rose-diamond",
+    prefix="/rose-diamond",
     tags=["rose-diamond"],
 )
 

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from fastapi import APIRouter
 
-cal_pistol_router = APIRouter(prefix="/titanic/cal-pistol", tags=["cal-pistol"])
+cal_pistol_router = APIRouter(prefix="/cal-pistol", tags=["cal-pistol"])
 
 
 @cal_pistol_router.post("/pistol")

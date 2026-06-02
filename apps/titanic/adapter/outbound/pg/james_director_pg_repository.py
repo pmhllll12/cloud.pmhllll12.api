@@ -1,84 +1,28 @@
-"""James 업로드 PostgreSQL 저장소 — 아웃바운드 데이터를 Neon DB로 전송."""
+"""James — PostgreSQL 아웃바운드 (스텁)."""
 
 from __future__ import annotations
 
-import logging
 from typing import Any
 
-from sqlalchemy import delete, func, select
-from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.ext.asyncio import AsyncSession
-
-from titanic.adapter.outbound.orm.james_passenger_orm import JamesPassenger
-from titanic.app.ports.output.james_repository import JamesRepositoryPort
-from titanic.app.titanic_csv_parser import API_COLUMNS
-
-logger = logging.getLogger(__name__)
+from titanic.app.dtos.james_director_dto import BookingCommand, PersonCommand
+from titanic.app.ports.output.james_director_repository import JamesRepository
 
 
-class JamesDirectorPgRepository(JamesDirectorRepository):
-    """`JamesCommand`에서 넘어온 행을 ORM으로 변환한 뒤 `commit()` 으로 Neon에 저장."""
+class JamesDirectorPgRepository(JamesRepository):
+    def __init__(self, session: Any) -> None:
+        self.session = session
 
-    def __init__(self, session: AsyncSession) -> None:
-        self._session = session
-
-    async def save_upload(
+    async def receive_uploaded_records(
         self,
-        *,
-        filename: str,
-        columns: list[str],
-        rows: list[dict[str, Any]],
+        person_commands: list[PersonCommand],
+        booking_commands: list[BookingCommand],
     ) -> int:
-        if not rows:
-            return 0
+        print("[제임스 레포지터리] PersonCommand 상위 5개 레코드:", flush=True)
+        for person in person_commands[:5]:
+            print(person, flush=True)
 
-        try:
-            await self._session.execute(delete(JamesPassenger))
-            self._session.add_all(
-                JamesPassenger.from_record(filename, row) for row in rows
-            )
-            await self._session.commit()
-        except SQLAlchemyError as exc:
-            await self._session.rollback()
-            logger.exception("Neon DB 전송 실패: %s", exc)
-            raise ValueError(f"Neon DB 저장에 실패했습니다: {exc}") from exc
+        print("[제임스 레포지터리] BookingCommand 상위 5개 레코드:", flush=True)
+        for booking in booking_commands[:5]:
+            print(booking, flush=True)
 
-        n = len(rows)
-        logger.info(
-            "[JamesPgRepository] 아웃바운드 — Neon `titanic_james_passengers` 저장·commit 완료 "
-            "filename=%s rows=%s",
-            filename,
-            n,
-        )
-        return n
-
-    async def fetch_page(
-        self,
-        *,
-        page: int,
-        page_size: int,
-    ) -> tuple[list[dict[str, Any]], int]:
-        count_result = await self._session.execute(
-            select(func.count()).select_from(JamesPassenger)
-        )
-        total = int(count_result.scalar_one())
-
-        offset = (page - 1) * page_size
-        result = await self._session.execute(
-            select(JamesPassenger)
-            .order_by(JamesPassenger.passenger_id)
-            .offset(offset)
-            .limit(page_size)
-        )
-        rows = [p.to_api_row() for p in result.scalars().all()]
-        logger.info(
-            "[JamesPgRepository] 승객 목록 조회 — page=%s size=%s total=%s",
-            page,
-            page_size,
-            total,
-        )
-        return rows, total
-
-    @staticmethod
-    def api_columns() -> list[str]:
-        return list(API_COLUMNS)
+        return len(person_commands)
