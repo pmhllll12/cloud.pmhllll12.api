@@ -133,19 +133,44 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
         yield session
 
 
+async def get_db_optional() -> AsyncGenerator[AsyncSession | None, None]:
+    """`DATABASE_URL` 이 없을 때는 `None` 을 넘겨 DB 없이도 라우트가 동작하도록 할 때 사용.
+
+    `get_db_session` 을 async for 로 감싸지 않는다 — 중첩 제너레이터는 정리 시점에
+    프록시 502·연결 오류를 유발할 수 있다.
+    """
+    if engine is None or AsyncSessionLocal is None:
+        yield None
+        return
+    async with AsyncSessionLocal() as session:
+        try:
+            yield session
+        except Exception:
+            if session.in_transaction():
+                await session.rollback()
+            raise
+
+
+def alembic_database_url() -> str:
+    """Alembic `env.py` 용 — `DATABASE_URL` 을 비동기 드라이버 URL 로 정규화."""
+    if not DATABASE_URL:
+        raise RuntimeError("DATABASE_URL 이 설정되어 있지 않습니다.")
+    return _async_database_url(DATABASE_URL)
+
+
 async def create_all_tables() -> None:
     """등록된 ORM 메타데이터로 Neon 테이블 생성 (없을 때만)."""
     if engine is None:
         raise RuntimeError("DATABASE_URL 이 없거나 엔진 초기화에 실패했습니다.")
 
     from secom.app.models import user_model  # noqa: F401
-    from titanic.adapter.outbound.orm.james_passenger_orm import JamesPassenger  # noqa: F401
-    from titanic.adapter.outbound.orm.walter_passenger_orm import WalterPassenger  # noqa: F401
+    from titanic.adapter.outbound.orm import booking_orm  # noqa: F401
+    from titanic.adapter.outbound.orm import person_orm  # noqa: F401
 
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
     logger.info(
-        "DB create_all 완료 (secom_users, titanic_james_passengers, titanic_walter_passengers 등)"
+        "DB create_all 완료 (secom_users, titanic_persons, titanic_bookings 등)"
     )
 
 

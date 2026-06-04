@@ -1,44 +1,50 @@
-from logging.config import fileConfig
+"""Alembic — Neon `DATABASE_URL`, 루트 `database.Base` + James ORM 메타데이터."""
 
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
+from __future__ import annotations
+
+import sys
+from logging.config import fileConfig
+from pathlib import Path
 
 from alembic import context
+from sqlalchemy import create_engine, pool
 
-# this is the Alembic Config object, which provides
-# access to the values within the .ini file in use.
+# `titanic` 은 `backend/apps/` 아래, `database` 는 `backend/` 루트 — 둘 다 path 에 필요
+_ROOT = Path(__file__).resolve().parents[1]
+_APPS = _ROOT / "apps"
+for _dir in (_APPS, _ROOT):
+    _p = str(_dir)
+    if _p not in sys.path:
+        sys.path.insert(0, _p)
+
+from dotenv import load_dotenv
+
+load_dotenv(_APPS / ".env")
+load_dotenv(_ROOT / ".env")
+
+from database import Base  # noqa: E402
+from database import alembic_database_url  # noqa: E402
+
+# 메타데이터에 ORM 테이블 등록
+from titanic.adapter.outbound.orm import booking_orm  # noqa: E402, F401
+from titanic.adapter.outbound.orm import person_orm  # noqa: E402, F401
+
 config = context.config
 
-# Interpret the config file for Python logging.
-# This line sets up loggers basically.
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# add your model's MetaData object here
-# for 'autogenerate' support
-# from myapp import mymodel
-# target_metadata = mymodel.Base.metadata
-target_metadata = None
+target_metadata = Base.metadata
 
-# other values from the config, defined by the needs of env.py,
-# can be acquired:
-# my_important_option = config.get_main_option("my_important_option")
-# ... etc.
+
+def get_url() -> str:
+    url = alembic_database_url()
+    config.set_main_option("sqlalchemy.url", url)
+    return url
 
 
 def run_migrations_offline() -> None:
-    """Run migrations in 'offline' mode.
-
-    This configures the context with just a URL
-    and not an Engine, though an Engine is acceptable
-    here as well.  By skipping the Engine creation
-    we don't even need a DBAPI to be available.
-
-    Calls to context.execute() here emit the given string to the
-    script output.
-
-    """
-    url = config.get_main_option("sqlalchemy.url")
+    url = get_url()
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -51,22 +57,11 @@ def run_migrations_offline() -> None:
 
 
 def run_migrations_online() -> None:
-    """Run migrations in 'online' mode.
-
-    In this scenario we need to create an Engine
-    and associate a connection with the context.
-
-    """
-    connectable = engine_from_config(
-        config.get_section(config.config_ini_section, {}),
-        prefix="sqlalchemy.",
-        poolclass=pool.NullPool,
-    )
+    url = get_url()
+    connectable = create_engine(url, poolclass=pool.NullPool)
 
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection, target_metadata=target_metadata
-        )
+        context.configure(connection=connection, target_metadata=target_metadata)
 
         with context.begin_transaction():
             context.run_migrations()

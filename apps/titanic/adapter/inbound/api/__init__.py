@@ -9,13 +9,21 @@ from titanic.adapter.inbound.api.V1.cal_pistol_router import cal_pistol_router
 from titanic.adapter.inbound.api.V1.hartley_violin_router import hartley_violin_router
 from titanic.adapter.inbound.api.V1.isidor_bed_router import isidor_bed_router
 from titanic.adapter.inbound.api.V1.jack_sketch_router import jack_sketch_router
-from titanic.adapter.inbound.api.V1.james_director_router import james_router
+from titanic.adapter.inbound.api.V1.james_director_router import james_router, list_passengers_titanic_root
 from titanic.adapter.inbound.api.V1.rose_diamond_router import rose_diamond_router
 from titanic.adapter.inbound.api.V1.ruth_corset_router import ruth_corset_router
 from titanic.adapter.inbound.api.V1.smith_captin_router import smith_captin_router
 from titanic.adapter.inbound.api.V1.walter_roaster_router import walter_roaster_router
+from titanic.adapter.inbound.api.schemas.james_director_schema import JamesDirectorPassengersListResponse
 
 titanic_router = APIRouter(prefix="/titanic", tags=["titanic"])
+# 수업용 UI 등에서 `/titanic/passengers` 로 호출하는 경우를 위해 루트 별칭
+titanic_router.add_api_route(
+    "/passengers",
+    list_passengers_titanic_root,
+    methods=["GET"],
+    response_model=JamesDirectorPassengersListResponse,
+)
 titanic_router.include_router(james_router)
 titanic_router.include_router(rose_diamond_router)
 titanic_router.include_router(walter_roaster_router)

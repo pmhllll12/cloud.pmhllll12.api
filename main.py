@@ -8,12 +8,17 @@ from pathlib import Path
 # `backend/` 에서 실행: `main` 모듈은 이 파일, `adapters`·`titanic` 등은 `apps/` 에 있음
 _BACKEND_ROOT = Path(__file__).resolve().parent
 _APPS_ROOT = _BACKEND_ROOT / "apps"
+_CORE_ROOT = _BACKEND_ROOT / "core"
 _backend_str = str(_BACKEND_ROOT)
 _apps_str = str(_APPS_ROOT)
+_core_str = str(_CORE_ROOT)
 if _backend_str not in sys.path:
     sys.path.insert(0, _backend_str)
 if _apps_str not in sys.path:
     sys.path.append(_apps_str)
+# `core/matrix/` → 최상위 패키지 이름이 `matrix` 이므로 `backend/core` 를 path 에 넣음
+if _core_str not in sys.path:
+    sys.path.append(_core_str)
 
 # Windows: NumPy/BLAS·MKL 이 기본 멀티스레드일 때 일부 환경에서 프로세스가 네이티브 크래시로
 # 종료되는 경우가 있어, pandas/numpy 로드 전에 스레드 수를 1로 제한합니다.
@@ -48,7 +53,7 @@ from adapters.db_health_adapter import DbHealthAdapter
 from adapters.weather_adapter import fetch_seoul_weather
 from database import dispose_engine, get_db
 from doro.app.doro_director import DoroDirector
-from matrix.app.keymaker import MissingApiKeyError, format_gemini_error, keymaker
+from matrix.keymaker_api import MissingApiKeyError, format_gemini_error, keymaker
 from titanic.adapter.inbound.api import titanic_router
 
 try:
@@ -147,11 +152,11 @@ class SignupResponse(BaseModel):
 async def lifespan(app: FastAPI):
     setup_app_logging()
     if SECOM_AVAILABLE:
-        from secom.app.bootstrap import init_secom_db
+        from secom.app.bootstrap import init_engine
 
-        await init_secom_db()
+        await init_engine()
     else:
-        logger.warning("secom 모듈 없음 — init_secom_db 생략")
+        logger.warning("secom 모듈 없음 — init_engine 생략")
     logger.info(
         "API 준비 port=%s — docs http://127.0.0.1:%s/docs | ping http://127.0.0.1:%s/ping",
         API_PORT,
@@ -173,7 +178,7 @@ app = FastAPI(title="TJ Watson Main Page", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["http://localhost:3000","http://127.0.0.1:3000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -368,6 +373,8 @@ def read_doro_data():
 
 if __name__ == "__main__":
     import uvicorn
+
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
 
     setup_app_logging()
     # Windows + reload 시 WatchFiles 가 서버를 자주 끊어 Vite 프록시 502 가 남 → 기본 끔

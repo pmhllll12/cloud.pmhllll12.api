@@ -9,8 +9,8 @@ from sqlalchemy import text
 from database import AsyncSessionLocal, Base, engine
 from secom.app.controllers.user_controller import UserController
 from secom.app.models.user_model import User  # noqa: F401 — Base 메타데이터 등록
-from titanic.adapter.outbound.orm.james_passenger_orm import JamesPassenger  # noqa: F401
-from titanic.adapter.outbound.orm.walter_passenger_orm import WalterPassenger  # noqa: F401
+from titanic.adapter.outbound.orm import booking_orm  # noqa: F401
+from titanic.adapter.outbound.orm import person_orm  # noqa: F401
 from secom.app.repositories.user_repository import UserRepository
 from secom.schemas.user_schemas import UserSchemas
 from secom.app.services.user_service import (
@@ -40,29 +40,7 @@ async def _migrate_secom_user_columns(conn) -> None:
     )
 
 
-async def _migrate_james_passenger_columns(conn) -> None:
-    """Neon `titanic_james_passengers`: `jender` 컬럼이 있으면 `gender` 로 맞춤."""
-    await conn.execute(
-        text(
-            """
-            DO $$
-            BEGIN
-              IF EXISTS (
-                SELECT 1 FROM information_schema.columns
-                WHERE table_name = 'titanic_james_passengers' AND column_name = 'jender'
-              ) AND NOT EXISTS (
-                SELECT 1 FROM information_schema.columns
-                WHERE table_name = 'titanic_james_passengers' AND column_name = 'gender'
-              ) THEN
-                ALTER TABLE titanic_james_passengers RENAME COLUMN jender TO gender;
-              END IF;
-            END $$;
-            """
-        )
-    )
-
-
-async def init_secom_db() -> None:
+async def init_engine() -> None:
     """DATABASE_URL 이 있을 때만 `secom_users` 테이블 생성 후 시드."""
     if engine is None or AsyncSessionLocal is None:
         logger.info("secom: DB 미사용 — 테이블/시드 생략")
@@ -71,7 +49,6 @@ async def init_secom_db() -> None:
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
         await _migrate_secom_user_columns(conn)
-        await _migrate_james_passenger_columns(conn)
 
     async with AsyncSessionLocal() as session:
         repo = UserRepository(session)
