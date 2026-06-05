@@ -25,6 +25,11 @@ class WalterRoasterDto:
         """인바운드 스키마(또는 동일 속성 객체)에서 값을 복사합니다."""
         return cls(id=schema.id, name=schema.name, memo=schema.memo)
 
+@dataclass
+class WalterRoasterResponse:
+    id: int
+    name: str
+    memo: str
 
 # 레거시 이름 (기존 `WalterRoasterQuery()` 호출 호환)
 WalterRoasterQuery = WalterRoasterDto

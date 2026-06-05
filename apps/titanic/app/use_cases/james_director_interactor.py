@@ -3,16 +3,11 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
 
 from titanic.adapter.inbound.api.schemas.james_director_schema import JamesDirectorRecordsSchema
-from titanic.adapter.outbound.pg.james_director_pg_repository import JamesDirectorPgRepository
 from titanic.app.dtos.james_director_dto import BookingCommand, PersonCommand
 from titanic.app.ports.input.james_director_use_case import JamesDirectorUseCase
 from titanic.app.ports.output.james_director_repository import JamesRepository
-
-if TYPE_CHECKING:
-    from sqlalchemy.ext.asyncio import AsyncSession
 
 logger = logging.getLogger(__name__)
 
@@ -26,10 +21,10 @@ def _embarked_code(raw: str | None) -> str:
 
 
 class JamesDirectorInteractor(JamesDirectorUseCase):
-    def __init__(self, session: AsyncSession | None = None) -> None:
-        self._session = session
+    def __init__(self, repository: JamesRepository) -> None:
+        self._repository = repository
 
-    async def receive_uploaded_records(self, schema: JamesDirectorRecordsSchema) -> None:
+    async def upload_titanic_file(self, schema: JamesDirectorRecordsSchema) -> None:
         logger.info("[제임스 유스케이스] 스키마 상위 5개 레코드:")
         for record in schema.rows[:5]:
             logger.info("%s", record)
@@ -65,5 +60,4 @@ class JamesDirectorInteractor(JamesDirectorUseCase):
                 )
             )
 
-        repository: JamesRepository = JamesDirectorPgRepository(self._session)
-        await repository.receive_uploaded_records(person_commands, booking_commands)
+        await self._repository.upload_titanic_file(person_commands, booking_commands)

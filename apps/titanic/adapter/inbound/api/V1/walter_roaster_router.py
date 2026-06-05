@@ -15,18 +15,15 @@ walter_roaster_router = APIRouter(
 
 
 @walter_roaster_router.get("/myself", response_model=WalterRoasterSchema)
-async def introduce_myself() -> WalterRoasterSchema:
-    """월터 기본 프로필을 반환하고 유스케이스·저장소 체인을 실행합니다."""
-    schema = WalterRoasterSchema()
+async def introduce_myself(
+    walter: WalterRoasterUsecase = Depends(get_walter_roaster_use_case)
+)->WalterRoasterResponse:
+    
 
-    logger.info("########################################################")
-    logger.info("[월터 라우터] 월터의 자기소개 API 호출")
-    logger.info("ID: %s", schema.id)
-    logger.info("이름: %s", schema.name)
-    logger.info("메모: %s", schema.memo)
-    logger.info("########################################################")
-
-    walter: WalterRoasterUsecase = WalterRoasterInteractor()
-    walter.introduce_myself(schema)
-
-    return schema
+    return await walter.introduce_myself(
+        WalterRoasterSchema(
+            id=2,
+            name="Walter Nicholas",
+            memo="타이타닉의 일등 항해사, 승객 명단 관리 담당"
+        )
+        )

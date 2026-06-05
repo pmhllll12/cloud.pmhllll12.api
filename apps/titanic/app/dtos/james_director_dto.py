@@ -37,5 +37,9 @@ class BookingCommand(BaseModel):
     embarked_code: str
     port_name: str
 
+@dataclass
+class JamesDirectorResponse:
+    answer: str
+
 
 __all__ = ["BookingCommand", "PersonCommand"]
