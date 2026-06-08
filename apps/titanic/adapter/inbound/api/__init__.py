@@ -17,7 +17,7 @@ from titanic.adapter.inbound.api.V1.passenger_cal_tester_router import passenger
 from titanic.adapter.inbound.api.V1.passenger_isidor_couple_router import passenger_isidor_couple_router
 from titanic.adapter.inbound.api.V1.passenger_jack_trainer_router import passenger_jack_trainer_router
 from titanic.adapter.inbound.api.V1.passenger_rose_model_router import passenger_rose_model_router
-from titanic.adapter.inbound.api.V1.passenger_ruth_survivor_router import passenger_ruth_survivor_router
+from titanic.adapter.inbound.api.V1.passenger_ruth_validation_router import passenger_ruth_validation_router
 from titanic.adapter.inbound.api.schemas.crew_james_director_schema import JamesDirectorPassengersListResponse
 
 titanic_router = APIRouter(prefix="/titanic", tags=["titanic"])
@@ -36,7 +36,7 @@ titanic_router.include_router(passenger_cal_tester_router)
 titanic_router.include_router(crew_hartley_violin_router)
 titanic_router.include_router(passenger_isidor_couple_router)
 titanic_router.include_router(passenger_jack_trainer_router)
-titanic_router.include_router(passenger_ruth_survivor_router)
+titanic_router.include_router(passenger_ruth_validation_router)
 titanic_router.include_router(crew_smith_captin_router)
 
 # 레거시 별칭 (기존 `james_router` import 호환)

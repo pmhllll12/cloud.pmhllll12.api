@@ -1,25 +1,18 @@
-"""James `BookingCommand` — Neon/PostgreSQL ORM (`database.Base` 와 동일 메타데이터)."""
-
 from __future__ import annotations
 
-from sqlalchemy import String
+from sqlalchemy import ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
 
-from database import Base
+from core.matrix.oracle_database import Base
 
 
-class JamesBooking(Base):
-    """`BookingCommand` 필드와 1:1. `booking_id` 는 기본 키 (업로드 시 `passenger_id` 와 동일 값 사용)."""
+class BookingOrm(Base):
+    __tablename__ = "bookings"
 
-    __tablename__ = "titanic_bookings"
-
-    booking_id: Mapped[str] = mapped_column(String(64), primary_key=True)
-    pclass: Mapped[str] = mapped_column(String(8), nullable=False)
-    ticket: Mapped[str] = mapped_column(String(128), nullable=False, default="")
-    fare: Mapped[str] = mapped_column(String(32), nullable=False, default="0")
-    cabin: Mapped[str] = mapped_column(String(64), nullable=False, default="")
-    embarked_code: Mapped[str] = mapped_column(String(8), nullable=False, default="")
-    port_name: Mapped[str] = mapped_column(String(128), nullable=False, default="")
-
-
-__all__ = ["JamesBooking"]
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    person_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("persons.id"), nullable=True)
+    pclass: Mapped[str | None] = mapped_column(String, nullable=True)
+    ticket: Mapped[str | None] = mapped_column(String, nullable=True)
+    fare: Mapped[str | None] = mapped_column(String, nullable=True)
+    cabin: Mapped[str | None] = mapped_column(String, nullable=True)
+    embarked: Mapped[str | None] = mapped_column(String, nullable=True)

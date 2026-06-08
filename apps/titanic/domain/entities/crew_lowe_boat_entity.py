@@ -1,0 +1,5 @@
+"""??? ??? ?????? ? ??? `titanic.adapter.inbound.api.schemas.crew_lowe_boat_schema` ? ? (`crew_lowe_boat_entity`)."""
+
+from __future__ import annotations
+
+__all__: list[str] = []

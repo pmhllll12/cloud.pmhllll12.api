@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
+from tailor.apps.titanic.adapter.inbound.api.schemas.crew_walter_roaster_schema import WalterRoasterSchema
+from tailor.apps.titanic.app.dtos.crew_walter_roaster_dto import WalterRoasterResponse
 
-from titanic.adapter.inbound.api.schemas.crew_walter_roaster_schemas import WalterRoasterSchema
+class WalterRoasterUseCase(ABC):
 
-
-class WalterRoasterUsecase(ABC):
     @abstractmethod
-    def introduce_myself(self, schema: WalterRoasterSchema) -> None:
-        """월터의 자기소개 메소드."""
-        ...
+    def introduce_myself(self, schema: WalterRoasterSchema) -> WalterRoasterResponse:
+        '''월터의 자기소개 메소드'''
+        pass

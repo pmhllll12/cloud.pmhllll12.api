@@ -1,18 +1,13 @@
-"""Walter 출력 포트 — `walter_query` / `walter_command` → 저장소 경계."""
+"""Walter 승객 명단 CSV → Neon 출력 포트 (`crew_walter_roaster` 캐릭터 포트와 별개)."""
 
 from __future__ import annotations
 
-import logging
 from dataclasses import dataclass
 from typing import Any, Protocol, runtime_checkable
 
-logger = logging.getLogger(__name__)
 
-
-@dataclass(frozen=True, slots=True)
+@dataclass(slots=True, frozen=True)
 class WalterPersistPayload:
-    """쿼리·커맨드에서 변환된 업로드 행 묶음."""
-
     filename: str
     columns: list[str]
     rows: list[dict[str, Any]]
@@ -20,6 +15,16 @@ class WalterPersistPayload:
 
 @runtime_checkable
 class WalterRepositoryPort(Protocol):
+    """Neon `titanic_walter_passengers` 등에 대한 비동기 저장·조회."""
+
+    async def persist_payload(self, payload: WalterPersistPayload) -> int:
+        """정규화된 행 묶음을 저장합니다."""
+        ...
+
+    async def load_all_rows(self) -> list[dict[str, Any]]:
+        """저장된 승객 행을 API 형식으로 반환합니다."""
+        ...
+
     async def save_upload(
         self,
         *,
@@ -27,45 +32,30 @@ class WalterRepositoryPort(Protocol):
         columns: list[str],
         rows: list[dict[str, Any]],
     ) -> int:
-        """변환된 업로드 데이터를 저장하고 저장된 행 수를 반환합니다."""
+        """업로드 스냅샷을 저장합니다."""
+        ...
 
     async def fetch_all(self) -> list[dict[str, Any]]:
-        """저장된 전체 행을 API 응답 형식(PascalCase + gender)으로 반환합니다."""
+        """전체 승객 행을 조회합니다."""
+        ...
+
+    @staticmethod
+    def api_columns() -> list[str]:
+        """API 컬럼 순서."""
+        ...
 
 
-async def submit_persist_upload(
-    repository: WalterRepositoryPort,
-    payload: WalterPersistPayload,
-) -> int:
-    """`walter_command` → 출력 포트 → `walter_pg_repository`."""
-    logger.info(
-        "[walter_repository] 저장 전달 — filename=%s rows=%s columns=%s → %s",
-        payload.filename,
-        len(payload.rows),
-        ", ".join(payload.columns),
-        type(repository).__name__,
-    )
-    row_count = await repository.save_upload(
-        filename=payload.filename,
-        columns=payload.columns,
-        rows=payload.rows,
-    )
-    logger.info(
-        "[walter_repository] 저장 응답 — filename=%s saved_rows=%s",
-        payload.filename,
-        row_count,
-    )
-    return row_count
+async def submit_persist_upload(repository: WalterRepositoryPort, payload: WalterPersistPayload) -> int:
+    return await repository.persist_payload(payload)
 
 
-async def submit_fetch_all_passengers(
-    repository: WalterRepositoryPort,
-) -> list[dict[str, Any]]:
-    """`walter_query` → 출력 포트 → `walter_pg_repository`."""
-    logger.info(
-        "[walter_repository] 조회 전달 — fetch_all → %s",
-        type(repository).__name__,
-    )
-    rows = await repository.fetch_all()
-    logger.info("[walter_repository] 조회 응답 — rows=%s", len(rows))
-    return rows
+async def submit_fetch_all_passengers(repository: WalterRepositoryPort) -> list[dict[str, Any]]:
+    return await repository.load_all_rows()
+
+
+__all__ = [
+    "WalterPersistPayload",
+    "WalterRepositoryPort",
+    "submit_fetch_all_passengers",
+    "submit_persist_upload",
+]

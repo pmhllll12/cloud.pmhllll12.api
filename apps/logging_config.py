@@ -25,7 +25,7 @@ _APP_LOGGER_NAMES = (
     "titanic.app.ports.output.walter_repository",
     "titanic.app.use_cases.james_command",
     "titanic.app.use_cases.walter_command",
-    "titanic.app.use_cases.walter_query",
+    "titanic.app.use_cases.crew_walter_roaster_interactor",
 )
 
 # 포트 모듈은 얇은 경계만 두고 INFO 로그를 남기지 않음 (필요 시 WARNING 이상만).

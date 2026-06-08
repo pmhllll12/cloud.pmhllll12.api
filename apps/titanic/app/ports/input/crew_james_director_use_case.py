@@ -1,17 +1,20 @@
 from __future__ import annotations
 
-import logging
 from abc import ABC, abstractmethod
+from typing import Any
 
-from titanic.adapter.inbound.api.schemas.crew_james_director_schema import JamesDirectorRecordsSchema
-
-logging.getLogger(__name__).setLevel(logging.WARNING)
+from tailor.apps.titanic.adapter.inbound.api.schemas.crew_james_director_schema import JamesDirectorSchema, TitanicRecordSchema
+from tailor.apps.titanic.app.dtos.crew_james_director_dto import JamesDirectorResponse
 
 
 class JamesDirectorUseCase(ABC):
-    """CSV 파싱 이후 애플리케이션 레이어 (로그·저장·도메인 규칙)."""
 
     @abstractmethod
-    async def receive_uploaded_records(self, schema: JamesDirectorRecordsSchema) -> None:
-        """라우터가 `JamesDirectorRecordsSchema` 를 넘긴 뒤 호출."""
-        ...
+    async def introduce_myself(self, schema: JamesDirectorSchema) -> JamesDirectorResponse:
+        '''제임스 감독의 자기소개 메소드'''
+        pass
+
+    @abstractmethod
+    async def upload_titanic_file(self, schema: list[JamesDirectorSchema]) :
+        """제임스 감독의 파일업로드 메소드 """
+        pass

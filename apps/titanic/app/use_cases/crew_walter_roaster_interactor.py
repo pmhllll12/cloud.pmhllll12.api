@@ -1,25 +1,33 @@
-import logging
+from typing import Any
 
-from titanic.adapter.inbound.api.schemas.crew_walter_roaster_schemas import WalterRoasterSchema
-from titanic.app.dtos.crew_walter_roaster_dto import WalterRoasterQuery
-from titanic.app.ports.input.crew_walter_roaster_use_case import WalterRoasterUsecase
+from tailor.apps.titanic.adapter.inbound.api.schemas.crew_walter_roaster_schema import WalterRoasterSchema
+from titanic.app.dtos.crew_walter_roaster_dto import WalterRoasterQuery, WalterRoasterResponse
+from titanic.app.ports.input.crew_walter_roaster_use_case import WalterRoasterUseCase
 from titanic.app.ports.output.crew_walter_roaster_repository import WalterRoasterRepository
 
-logger = logging.getLogger(__name__)
+
+class WalterQuery:
+    def __init__(self, repository) -> None:
+        self.repository = repository
+
+    async def list_paginated(self, page: int, page_size: int) -> dict[str, Any]:
+        total, items = await self.repository.list_paginated(page, page_size)
+        return {
+            "total": total,
+            "page": page,
+            "page_size": page_size,
+            "items": items,
+        }
 
 
-class WalterRoasterInteractor(WalterRoasterUsecase):
+class WalterRoasterInteractor(WalterRoasterUseCase):
+
     def __init__(self, repository: WalterRoasterRepository) -> None:
-        self._repository = repository
+        self.repository = repository
 
-    def introduce_myself(self, schema: WalterRoasterSchema) -> None:
-        query = WalterRoasterQuery.from_schema(schema)
-
-        logger.info("########################################################")
-        logger.info("[월터 유스케이스] 라우터에서 받은 정보 → DTO")
-        logger.info("ID: %s", query.id)
-        logger.info("이름: %s", query.name)
-        logger.info("메모: %s", query.memo)
-        logger.info("########################################################")
-
-        self._repository.introduce_myself(query)
+    async def introduce_myself(self, schema: WalterRoasterSchema) -> WalterRoasterResponse:
+        return await self.repository.introduce_myself(WalterRoasterQuery(
+            id=schema.id,
+            name=schema.name,
+            memo=schema.memo,
+        ))
