@@ -1,4 +1,4 @@
-"""µµ¸ŞÀÎ ¿£Æ¼Æ¼ ÇÃ·¹ÀÌ½ºÈ¦´õ ? ½ºÅ°¸¶ `titanic.adapter.inbound.api.schemas.passenger_isidor_couple_schemas` ¿Í Â¦ (`passenger_isidor_couple_entity`)."""
+"""ë„ë©”ì¸ ì—”í‹°í‹° í”Œë ˆì´ìŠ¤í™€ë” ? ìŠ¤í‚¤ë§ˆ `titanic.adapter.inbound.api.schemas.passenger_isidor_couple_schemas` ì™€ ì§ (`passenger_isidor_couple_entity`)."""
 
 from __future__ import annotations
 

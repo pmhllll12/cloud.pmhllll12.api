@@ -21,6 +21,13 @@ class BookingCommand:
     embarked: str
 
 @dataclass
+class JamesDirectorQuery:
+    id: int
+    name: str
+
+
+@dataclass
 class JamesDirectorResponse:
-    answer: str
+    id: int
+    name: str
     

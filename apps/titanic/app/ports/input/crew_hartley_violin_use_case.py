@@ -3,8 +3,8 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import Any
 
-from tailor.apps.titanic.adapter.inbound.api.schemas.crew_hartley_violin_schema import HartleyViolinSchema
-from tailor.apps.titanic.app.dtos.crew_hartley_violin_dto import HartleyViolinResponse
+from titanic.adapter.inbound.api.schemas.crew_hartley_violin_schemas import HartleyViolinSchema
+from titanic.app.dtos.crew_hartley_violin_dto import HartleyViolinResponse
 
 
 class HartleyViolinUseCase(ABC):

@@ -2,9 +2,13 @@ from __future__ import annotations
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from titanic.adapter.outbound.orm.booking_orm import BookingOrm
-from titanic.adapter.outbound.orm.passenger_orm import PersonOrm
-from titanic.app.dtos.crew_james_director_dto import BookingCommand, PersonCommand
+from titanic.adapter.inbound.api.schemas.crew_james_director_schema import JamesDirectorSchema
+from titanic.app.dtos.crew_james_director_dto import (
+    BookingCommand,
+    JamesDirectorQuery,
+    JamesDirectorResponse,
+    PassengerCommand,
+)
 from titanic.app.ports.output.crew_james_director_repository import JamesDirectorRepository
 
 
@@ -12,11 +16,20 @@ class JamesDirectorPgRepository(JamesDirectorRepository):
     def __init__(self, session: AsyncSession) -> None:
         self.session = session
 
-    async def upload_titanic_file(
+    async def introduce_myself(self, query: JamesDirectorQuery) -> JamesDirectorResponse:
+        return JamesDirectorResponse(id=query.id, name=query.name)
+
+    async def upload_titanic_file(self, schema: list[JamesDirectorSchema]) -> None:
+        return None
+
+    async def receive_uploaded_records(
         self,
-        person_commands: list[PersonCommand],
+        person_commands: list[PassengerCommand],
         booking_commands: list[BookingCommand],
     ) -> int:
+        from titanic.adapter.outbound.orm.booking_orm import BookingOrm
+        from titanic.adapter.outbound.orm.person_orm import PersonOrm
+
         person_orms = [
             PersonOrm(
                 passenger_id=cmd.passenger_id,

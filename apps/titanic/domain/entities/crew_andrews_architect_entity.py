@@ -1,4 +1,4 @@
-"""µµ¸ŞÀÎ ¿£Æ¼Æ¼ ÇÃ·¹ÀÌ½ºÈ¦´õ ? ½ºÅ°¸¶ `titanic.adapter.inbound.api.schemas.crew_andrews_architect_schemas` ¿Í Â¦ (`crew_andrews_architect_entity`)."""
+"""ë„ë©”ì¸ ì—”í‹°í‹° í”Œë ˆì´ìŠ¤í™€ë” ? ìŠ¤í‚¤ë§ˆ `titanic.adapter.inbound.api.schemas.crew_andrews_architect_schemas` ì™€ ì§ (`crew_andrews_architect_entity`)."""
 
 from __future__ import annotations
 

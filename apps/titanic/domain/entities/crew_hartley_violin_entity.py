@@ -1,4 +1,4 @@
-"""µµ¸ŞÀÎ ¿£Æ¼Æ¼ ÇÃ·¹ÀÌ½ºÈ¦´õ ? ½ºÅ°¸¶ `titanic.adapter.inbound.api.schemas.crew_hartley_violin_schemas` ¿Í Â¦ (`crew_hartley_violin_entity`)."""
+"""ë„ë©”ì¸ ì—”í‹°í‹° í”Œë ˆì´ìŠ¤í™€ë” ? ìŠ¤í‚¤ë§ˆ `titanic.adapter.inbound.api.schemas.crew_hartley_violin_schemas` ì™€ ì§ (`crew_hartley_violin_entity`)."""
 
 from __future__ import annotations
 

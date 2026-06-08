@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
-from tailor.apps.titanic.adapter.inbound.api.schemas.crew_walter_roaster_schema import WalterRoasterSchema
-from tailor.apps.titanic.app.dtos.crew_walter_roaster_dto import WalterRoasterResponse
+from titanic.adapter.inbound.api.schemas.crew_walter_roaster_schemas import WalterRoasterSchema
+from titanic.app.dtos.crew_walter_roaster_dto import WalterRoasterResponse
 
 class WalterRoasterUseCase(ABC):
 

@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Any
+
+from titanic.app.dtos.passenger_jack_trainer_dto import JackTrainerQuery, JackTrainerResponse
 
 
 class JackTrainRepository(ABC):
-
     @abstractmethod
-    async def get_training_data(self) -> list[dict[str, Any]]:
-        ...
+    async def introduce_myself(self, query: JackTrainerQuery) -> JackTrainerResponse:
+        raise NotImplementedError

@@ -1,16 +1,15 @@
-from pydantic import BaseModel, Field
+from fastapi import Depends
+from sqlalchemy.ext.asyncio import AsyncSession
 
-class RuthValidationSchema(BaseModel):
-    
-    id: int = Field(0, description="Passenger ID")
-    name: str = Field("루쓰 드윗 부카터", description="Passenger's name")
-    # 로즈의 어머니. 류사회의 격식과 가문의 재정적 생존(밸리데이션)을 강요했던 엄격한 인물
-    
-    model_config = {
-        "json_schema_extra": {
-            "example": {
-                "id": 12,
-                "name": "Ruth DeWitt Bukater",
-            }
-        }
-    }
+from database import get_db
+from titanic.adapter.outbound.pg.passenger_ruth_validation_pg_repository import RuthValidationPgRepository
+from titanic.app.ports.input.passenger_ruth_validation_use_case import RuthValidationUseCase
+from titanic.app.ports.output.passenger_ruth_validation_repository import RuthValidationRepository
+from titanic.app.use_cases.passenger_ruth_validation_interactor import RuthValidationInteractor
+
+
+def get_ruth_validation_use_case(
+        db: AsyncSession = Depends(get_db)
+) -> RuthValidationUseCase:
+    repository: RuthValidationRepository = RuthValidationPgRepository(session=db)
+    return RuthValidationInteractor(repository=repository)

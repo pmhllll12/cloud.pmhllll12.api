@@ -1,4 +1,5 @@
-from titanic.app.ports.output.crew_james_director_repository import JamesRepository
+"""Titanic application output ports."""
+
 from titanic.app.ports.output.walter_repository import (
     WalterPersistPayload,
     WalterRepositoryPort,
@@ -7,7 +8,6 @@ from titanic.app.ports.output.walter_repository import (
 )
 
 __all__ = [
-    "JamesRepository",
     "submit_walter_persist_upload",
     "WalterPersistPayload",
     "WalterRepositoryPort",

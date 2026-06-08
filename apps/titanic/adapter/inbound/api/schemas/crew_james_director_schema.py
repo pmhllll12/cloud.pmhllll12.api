@@ -45,3 +45,7 @@ class JamesDirectorRecordsSchema(BaseModel):
 
 class UploadResultSchema(BaseModel):
     saved: int = Field(..., description="저장된 레코드 수")
+
+
+# 라우터·유스케이스에서 사용하는 CSV 행 스키마 별칭
+TitanicRecordSchema = JamesDirectorSchema

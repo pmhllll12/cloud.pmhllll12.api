@@ -52,8 +52,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from adapters.db_health_adapter import DbHealthAdapter
 from adapters.weather_adapter import fetch_seoul_weather
 from database import dispose_engine, get_db
-from doro.app.doro_director import DoroDirector
-from matrix.keymaker_api import MissingApiKeyError, format_gemini_error, keymaker
+
+from core.matrix.vault_keymaker_secret_manager import MissingApiKeyError, format_gemini_error, keymaker
 from titanic.adapter.inbound.api import titanic_router
 
 try:

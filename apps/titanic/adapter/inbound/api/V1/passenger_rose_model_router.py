@@ -1,14 +1,9 @@
-from fastapi import APIRouter, Depends, Query
-from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import APIRouter, Depends
 
-from core.matrix.oracle_database import get_db
-from tailor.apps.titanic.adapter.inbound.api.schemas.passenger_rose_model_schema import RoseModelSchema
-from tailor.apps.titanic.app.dtos.passenger_rose_model_dto import RoseModelResponse
-from tailor.apps.titanic.app.ports.input.passenger_rose_model_use_case import RoseModelUseCase
-from tailor.apps.titanic.dependencies.passenger_rose_model_provider import get_rose_model_use_case
-from titanic.adapter.outbound.pg.crew_walter_roaster_pg_repository import WalterPgRepository
-from titanic.app.use_cases.passenger_cal_tester_interactor import CaledonValidation
-from titanic.app.use_cases.crew_walter_roaster_interactor import WalterQuery
+from titanic.adapter.inbound.api.schemas.passenger_rose_model_schemas import RoseModelSchema
+from titanic.app.dtos.passenger_rose_model_dto import RoseModelResponse
+from titanic.app.ports.input.passenger_rose_model_use_case import RoseModelUseCase
+from titanic.dependencies.passenger_rose_model_provider import get_rose_model_use_case
 
 '''
 로즈 드윗 부카터 (Rose DeWitt Bukater)
@@ -29,4 +24,3 @@ async def introduce_myself(
             name="로즈 드윗 부카터 (Rose DeWitt Bukater)"
         )
     )
-

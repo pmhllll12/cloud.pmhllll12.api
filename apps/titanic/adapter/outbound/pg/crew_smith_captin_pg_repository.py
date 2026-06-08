@@ -1,25 +1,22 @@
 from __future__ import annotations
 
-from typing import Any
+import logging
 
-from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from titanic.adapter.outbound.orm.passenger_orm import PersonOrm
+from titanic.app.dtos.crew_smith_captin_dto import SmithCaptainQuery, SmithCaptainResponse
+from titanic.app.ports.output.crew_smith_captin_repository import SmithCaptainRepository
+
+logger = logging.getLogger(__name__)
 
 
-class SmithCaptainPgRepository:
+class SmithCaptainPgRepository(SmithCaptainRepository):
     def __init__(self, session: AsyncSession) -> None:
         self.session = session
 
-    async def get_stats(self) -> dict[str, Any]:
-        """전체 승객 생존/사망 통계 조회"""
-        total = (
-            await self.session.execute(select(func.count()).select_from(PersonOrm))
-        ).scalar_one()
-        survived = (
-            await self.session.execute(
-                select(func.count()).where(PersonOrm.survived == "1")
-            )
-        ).scalar_one()
-        return {"total": total, "survived": survived, "perished": total - survived}
+    async def introduce_myself(self, query: SmithCaptainQuery) -> SmithCaptainResponse:
+        logger.info("[SmithCaptainPgRepository] introduce_myself | request_data=%s", query)
+        return SmithCaptainResponse(
+            id=query.id * 10000,
+            name=query.name + "가 레포지토리에 다녀옴",
+        )
