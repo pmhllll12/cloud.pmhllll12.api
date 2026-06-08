@@ -1,9 +1,3 @@
-from titanic.adapter.inbound.api.schemas.james_response import JamesUploadResponse
-from titanic.adapter.inbound.api.schemas.titanic_request import TitanicPassengerRowRequest
-from titanic.adapter.inbound.api.schemas.titanic_response import TitanicCommandResponse
+"""Inbound API schemas — 개별 스키마 모듈을 직접 import 하세요."""
 
-__all__ = [
-    "JamesUploadResponse",
-    "TitanicPassengerRowRequest",
-    "TitanicCommandResponse",
-]
+__all__: list[str] = []

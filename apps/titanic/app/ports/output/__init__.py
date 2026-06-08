@@ -1,4 +1,4 @@
-from titanic.app.ports.output.james_director_repository import JamesRepository
+from titanic.app.ports.output.crew_james_director_repository import JamesRepository
 from titanic.app.ports.output.walter_repository import (
     WalterPersistPayload,
     WalterRepositoryPort,

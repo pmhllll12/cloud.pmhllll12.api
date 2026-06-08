@@ -1,4 +1,4 @@
-from titanic.app.ports.input.james_director_use_case import JamesDirectorUseCase
+from titanic.app.ports.input.crew_james_director_use_case import JamesDirectorUseCase
 from fastapi import APIRouter, Depends
 
 router = APIRouter(prefix="/friday-13th/jason", tags=["jason_mask"])
