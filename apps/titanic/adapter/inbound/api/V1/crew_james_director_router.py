@@ -17,10 +17,10 @@ from titanic.dependencies.crew_james_director_provider import get_james_director
 '''
 james_director_router = APIRouter(prefix="/james", tags=["james"])
 
-@james_director_router.get("/myself")
+@james_director_router.get("/myself", response_model=JamesDirectorResponse)
 async def introduce_myself(
     james: JamesDirectorUseCase = Depends(get_james_director_use_case)
-):
+) -> JamesDirectorResponse:
     return await james.introduce_myself(
         JamesDirectorSchema(
             id=6,

@@ -4,6 +4,9 @@ from pydantic import BaseModel, Field
 
 
 class JamesDirectorSchema(BaseModel):
+    """승객 CSV 행 / 자기소개 데모 공통 스키마."""
+
+    id: Optional[int] = Field(None, description="데모·자기소개용 식별자 (CSV 업로드 시 생략 가능)")
     passenger_id: Optional[str] = Field(None, description="승객 번호")
     survived: Optional[str] = Field(None, description="생존 여부 (0=사망, 1=생존)")
     pclass: Optional[str] = Field(None, description="티켓 등급 (1=1등석, 2=2등석, 3=3등석)")

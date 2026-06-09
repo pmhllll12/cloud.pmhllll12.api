@@ -11,7 +11,7 @@ from titanic.dependencies.passenger_ruth_validation_provider import get_ruth_val
 통제욕의 상징.
 '''
 
-ruth_validation_router = APIRouter(prefix="/titanic/ruth", tags=["ruth"])
+ruth_validation_router = APIRouter(prefix="/ruth", tags=["ruth"])
 
 
 @ruth_validation_router.get("/myself")

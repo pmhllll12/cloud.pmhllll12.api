@@ -17,7 +17,7 @@ class JamesDirectorRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    async def upload_titanic_file(self, schema: list[JamesDirectorSchema]) -> None:
+    async def upload_titanic_file(self, schema: list[JamesDirectorSchema]) -> JamesDirectorResponse:
         raise NotImplementedError
 
     @abstractmethod

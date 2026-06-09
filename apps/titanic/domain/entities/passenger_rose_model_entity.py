@@ -1,5 +1,16 @@
-"""도메인 엔티티 플레이스홀더 ? 스키마 `titanic.adapter.inbound.api.schemas.passenger_rose_model_schemas` 와 짝 (`passenger_rose_model_entity`)."""
-
 from __future__ import annotations
 
-__all__: list[str] = []
+from dataclasses import dataclass
+
+
+@dataclass
+class RoseModelEntity:
+    """로즈 모델 예약/티켓 행 — `RoseModelOrm` 과 1:1 대응."""
+
+    id: int | None
+    person_id: int | None
+    pclass: str | None
+    ticket: str | None
+    fare: str | None
+    cabin: str | None
+    embarked: str | None

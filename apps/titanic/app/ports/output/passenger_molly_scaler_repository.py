@@ -1,9 +1,11 @@
 from __future__ import annotations
 
-from abc import ABC
+from abc import ABC, abstractmethod
+
+from titanic.app.dtos.passenger_molly_scaler_dto import MollyScalerQuery, MollyScalerResponse
 
 
 class MollyScalerRepository(ABC):
-   def introduce_myself(self, query: MollyScalerQuery):
-        '''월터의 자기 소개 레포지토리 추상 메소드'''
-        pass
+    @abstractmethod
+    async def introduce_myself(self, query: MollyScalerQuery) -> MollyScalerResponse:
+        raise NotImplementedError

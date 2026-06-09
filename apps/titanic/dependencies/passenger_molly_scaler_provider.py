@@ -1,16 +1,15 @@
-from pydantic import BaseModel, Field
+from fastapi import Depends
+from sqlalchemy.ext.asyncio import AsyncSession
 
-class MollyScalerSchema(BaseModel):
-    
-    id: int = Field(0, description="Passenger ID")
-    name: str = Field("몰리 브라운", description="Passenger's name")
-    # 침몰하지 않는 몰리 브라운. 신흥 귀족 출신으로 6호 구명보트를 직접 지휘하며 승객들을 격려함
-    
-    model_config = {
-        "json_schema_extra": {
-            "example": {
-                "id": 10,
-                "name": "Margaret 'Molly' Brown",
-            }
-        }
-    }
+from database import get_db
+from titanic.adapter.outbound.pg.passenger_molly_scaler_pg_repository import MollyScalerPgRepository
+from titanic.app.ports.input.passenger_molly_scaler_use_case import MollyScalerUseCase
+from titanic.app.ports.output.passenger_molly_scaler_repository import MollyScalerRepository
+from titanic.app.use_cases.passenger_molly_scaler_interactor import MollyScalerInteractor
+
+
+def get_molly_scaler_use_case(
+        db: AsyncSession = Depends(get_db)
+) -> MollyScalerUseCase:
+    repository: MollyScalerRepository = MollyScalerPgRepository(session=db)
+    return MollyScalerInteractor(repository=repository)

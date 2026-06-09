@@ -1,5 +1,58 @@
-"""µµ¸ŞÀÎ ¿£Æ¼Æ¼ ÇÃ·¹ÀÌ½ºÈ¦´õ ? ½ºÅ°¸¶ `titanic.adapter.inbound.api.schemas.crew_james_director_schema` ¿Í Â¦ (`crew_james_director_entity`)."""
-
 from __future__ import annotations
 
-__all__: list[str] = []
+from dataclasses import dataclass
+
+
+@dataclass
+class JamesPersonEntity:
+    """James ì—…ë¡œë“œ `PersonOrm` í–‰ê³¼ 1:1 ëŒ€ì‘."""
+
+    passenger_id: str
+    name: str
+    gender: str
+    age: str
+    sib_sp: str
+    parch: str
+    survived: str
+    id: int | None = None
+
+
+@dataclass
+class JamesDirectorPersonEntity:
+    """`JamesPersonOrm`(titanic_persons) í–‰ê³¼ 1:1 ëŒ€ì‘."""
+
+    passenger_id: str
+    booking_id: str
+    embarked_code: str
+    name: str
+    gender: str
+    age: str
+    sib_sp: str
+    parch: str
+    survived: str
+
+
+@dataclass
+class JamesDirectorBookingEntity:
+    """`JamesBookingOrm`(titanic_bookings) í–‰ê³¼ 1:1 ëŒ€ì‘."""
+
+    booking_id: str
+    pclass: str
+    ticket: str
+    fare: str
+    cabin: str
+    embarked_code: str
+    port_name: str
+
+
+@dataclass
+class JamesBookingEntity:
+    """James ì—…ë¡œë“œ `BookingOrm` í–‰ê³¼ 1:1 ëŒ€ì‘."""
+
+    person_id: int | None
+    pclass: str
+    ticket: str
+    fare: str
+    cabin: str
+    embarked: str
+    id: int | None = None

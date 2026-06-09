@@ -1,5 +1,17 @@
-"""도메인 엔티티 플레이스홀더 ? 스키마 `titanic.adapter.inbound.api.schemas.passenger_jack_trainer_schemas` 와 짝 (`passenger_jack_trainer_entity`)."""
-
 from __future__ import annotations
 
-__all__: list[str] = []
+from dataclasses import dataclass
+
+
+@dataclass
+class JackTrainerEntity:
+    """잭 트레이너 승객 행 — `JackTrainerOrm` 컬럼과 1:1 대응."""
+
+    id: int | None
+    passenger_id: str | None
+    name: str | None
+    gender: str | None
+    age: str | None
+    sib_sp: str | None
+    parch: str | None
+    survived: str | None

@@ -1,5 +1,8 @@
-"""������ ��ƼƼ �÷��̽�Ȧ�� ? ��Ű�� `titanic.adapter.inbound.api.schemas.passenger_ruth_validation_schemas` �� ¦ (`passenger_ruth_validation_entity`)."""
-
 from __future__ import annotations
 
-__all__: list[str] = []
+from dataclasses import dataclass
+
+
+@dataclass
+class RuthValidationEntity:
+    """루스 검증 설계용 도메인 자리표시자 — ORM 이 `__abstract__` 일 때 사용."""

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import logging
+
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from titanic.adapter.inbound.api.schemas.crew_james_director_schema import JamesDirectorSchema
@@ -11,16 +13,21 @@ from titanic.app.dtos.crew_james_director_dto import (
 )
 from titanic.app.ports.output.crew_james_director_repository import JamesDirectorRepository
 
+logger = logging.getLogger(__name__)
+
 
 class JamesDirectorPgRepository(JamesDirectorRepository):
     def __init__(self, session: AsyncSession) -> None:
         self.session = session
 
     async def introduce_myself(self, query: JamesDirectorQuery) -> JamesDirectorResponse:
+        logger.info("[JamesDirectorPgRepository] introduce_myself | request_data=%s", query)
         return JamesDirectorResponse(id=query.id, name=query.name)
 
-    async def upload_titanic_file(self, schema: list[JamesDirectorSchema]) -> None:
-        return None
+    async def upload_titanic_file(self, schema: list[JamesDirectorSchema]) -> JamesDirectorResponse:
+        """CSV 파싱 결과 행 수만 반환하는 스텁(실제 DB 반영은 receive_uploaded_records 흐름)."""
+        logger.info("[JamesDirectorPgRepository] upload_titanic_file | rows=%s", len(schema))
+        return JamesDirectorResponse(id=len(schema), name=f"CSV {len(schema)}행 수신")
 
     async def receive_uploaded_records(
         self,
@@ -28,7 +35,7 @@ class JamesDirectorPgRepository(JamesDirectorRepository):
         booking_commands: list[BookingCommand],
     ) -> int:
         from titanic.adapter.outbound.orm.booking_orm import BookingOrm
-        from titanic.adapter.outbound.orm.person_orm import PersonOrm
+        from titanic.adapter.outbound.orm.passenger_orm import PersonOrm
 
         person_orms = [
             PersonOrm(

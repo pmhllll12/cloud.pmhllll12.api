@@ -5,10 +5,10 @@ from __future__ import annotations
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column
 
-from database import Base
+from matrix.grid_neo_theone_base import Base
 
 
-class JamesBooking(Base):
+class JamesBookingOrm(Base):
     __tablename__ = "titanic_bookings"
 
     booking_id: Mapped[str] = mapped_column(String(64), primary_key=True)
@@ -20,7 +20,7 @@ class JamesBooking(Base):
     port_name: Mapped[str] = mapped_column(String(128), nullable=False, default="")
 
 
-class JamesPerson(Base):
+class JamesPersonOrm(Base):
     __tablename__ = "titanic_persons"
 
     passenger_id: Mapped[str] = mapped_column(String(64), primary_key=True)
@@ -34,4 +34,4 @@ class JamesPerson(Base):
     survived: Mapped[str] = mapped_column(String(8), nullable=False, default="0")
 
 
-__all__ = ["JamesBooking", "JamesPerson"]
+__all__ = ["JamesBookingOrm", "JamesPersonOrm"]

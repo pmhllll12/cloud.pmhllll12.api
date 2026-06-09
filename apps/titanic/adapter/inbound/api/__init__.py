@@ -13,6 +13,9 @@ from titanic.adapter.inbound.api.V1.crew_hartley_violin_router import (
 from titanic.adapter.inbound.api.V1.crew_james_director_router import (
     james_director_router as crew_james_director_router,
 )
+from titanic.adapter.inbound.api.V1.crew_lowe_boat_router import (
+    lowe_boat_router as crew_lowe_boat_router,
+)
 from titanic.adapter.inbound.api.V1.crew_smith_captin_router import (
     smith_captain_router as crew_smith_captin_router,
 )
@@ -28,6 +31,9 @@ from titanic.adapter.inbound.api.V1.passenger_isidor_couple_router import (
 from titanic.adapter.inbound.api.V1.passenger_jack_trainer_router import (
     jack_trainer_router as passenger_jack_trainer_router,
 )
+from titanic.adapter.inbound.api.V1.passenger_molly_scaler_router import (
+    molly_scaler_router as passenger_molly_scaler_router,
+)
 from titanic.adapter.inbound.api.V1.passenger_rose_model_router import (
     rose_model_router as passenger_rose_model_router,
 )
@@ -39,14 +45,40 @@ from titanic.adapter.inbound.api.V1.passenger_ruth_validation_router import (
 james_router = crew_james_director_router
 
 titanic_router = APIRouter(prefix="/titanic", tags=["titanic"])
+
+
+@titanic_router.get("/", summary="타이타닉 API 안내")
+async def titanic_root() -> dict[str, str]:
+    """`/titanic` 아래 캐릭터별 엔드포인트 목록(상위에 `/titanic` 한 번만 붙습니다)."""
+    return {
+        "message": "Titanic demo API",
+        "paths": {
+            "james_myself": "/titanic/james/myself",
+            "james_upload": "/titanic/james/upload",
+            "rose_myself": "/titanic/rose/myself",
+            "walter_myself": "/titanic/walter/myself",
+            "andrews_myself": "/titanic/andrews/myself",
+            "cal_myself": "/titanic/cal/myself",
+            "hartley_myself": "/titanic/hartley/myself",
+            "lowe_myself": "/titanic/lowe/myself",
+            "isidor_myself": "/titanic/isidor/myself",
+            "jack_myself": "/titanic/jack/myself",
+            "molly_myself": "/titanic/molly/myself",
+            "ruth_myself": "/titanic/ruth/myself",
+            "smith_myself": "/titanic/smith/myself",
+        },
+    }
+
 titanic_router.include_router(crew_james_director_router)
 titanic_router.include_router(passenger_rose_model_router)
 titanic_router.include_router(crew_walter_roaster_router)
 titanic_router.include_router(crew_andrews_architect_router)
 titanic_router.include_router(passenger_cal_tester_router)
 titanic_router.include_router(crew_hartley_violin_router)
+titanic_router.include_router(crew_lowe_boat_router)
 titanic_router.include_router(passenger_isidor_couple_router)
 titanic_router.include_router(passenger_jack_trainer_router)
+titanic_router.include_router(passenger_molly_scaler_router)
 titanic_router.include_router(passenger_ruth_validation_router)
 titanic_router.include_router(crew_smith_captin_router)
 

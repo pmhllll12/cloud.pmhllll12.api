@@ -12,7 +12,7 @@ from titanic.dependencies.crew_smith_captin_provider import get_smith_captain_us
 추천 파일명: smith_captain_router.py (또는 smith_wheel_router.py)
 '''
 
-smith_captain_router = APIRouter(prefix="/titanic/smith", tags=["smith"])
+smith_captain_router = APIRouter(prefix="/smith", tags=["smith"])
 
 
 @smith_captain_router.get("/myself")

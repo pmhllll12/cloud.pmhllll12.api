@@ -374,10 +374,10 @@ def read_doro_data():
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
-
-    setup_app_logging()
-    # Windows + reload 시 WatchFiles 가 서버를 자주 끊어 Vite 프록시 502 가 남 → 기본 끔
+    # 주의: `python main.py` 는 반드시 `minho/` 디렉터리에서 실행하세요.
+    # 브라우저 주소는 반드시 `http://` 로 시작해야 합니다 (https 아님).
+    # Windows 에서 `localhost` 가 IPv6(::1)만 가면 연결이 안 될 수 있어 기본은 127.0.0.1 입니다.
+    # 다른 PC·휴대폰에서 접속하려면 API_HOST=0.0.0.0 환경 변수를 설정하세요.
     _reload_default = "0" if sys.platform == "win32" else "1"
     use_reload = os.getenv("UVICORN_RELOAD", _reload_default).lower() in (
         "1",
@@ -396,6 +396,11 @@ if __name__ == "__main__":
         log_level="info",
         log_config=get_uvicorn_log_config(),
         access_log=True,
+    )
+    logger.info(
+        "브라우저에서 열 주소: http://127.0.0.1:%s/docs 또는 http://127.0.0.1:%s/ping",
+        API_PORT,
+        API_PORT,
     )
     if use_reload:
         uvicorn.run(

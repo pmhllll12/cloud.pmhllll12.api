@@ -1,5 +1,8 @@
-"""µµ¸ŞÀÎ ¿£Æ¼Æ¼ ÇÃ·¹ÀÌ½ºÈ¦´õ ? ½ºÅ°¸¶ `titanic.adapter.inbound.api.schemas.passenger_molly_scaler_schema` ¿Í Â¦ (`passenger_molly_scaler_entity`)."""
-
 from __future__ import annotations
 
-__all__: list[str] = []
+from dataclasses import dataclass
+
+
+@dataclass
+class MollyScalerEntity:
+    """ëª°ë¦¬ ì„¤ê³„ìš© ë„ë©”ì¸ ìë¦¬í‘œì‹œì â€” ORM ì´ `__abstract__` ì¼ ë•Œ ì‚¬ìš©."""

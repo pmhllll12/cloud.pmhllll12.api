@@ -11,7 +11,7 @@ from titanic.dependencies.passenger_rose_model_provider import get_rose_model_us
 영화의 핵심 매개체인 '다이아몬드'와 관련된 키워드입니다.
 '''
 
-rose_model_router = APIRouter(prefix="/titanic/rose", tags=["rose"])
+rose_model_router = APIRouter(prefix="/rose", tags=["rose"])
 
 
 @rose_model_router.get("/myself")

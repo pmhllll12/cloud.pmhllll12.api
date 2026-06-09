@@ -1,5 +1,7 @@
-﻿"""Outbound ORM 플레이스홀더 — API 스키마 `titanic.adapter.inbound.api.schemas.crew_hartley_violin_schemas`."""
+﻿from matrix.grid_neo_theone_base import Base
 
-from __future__ import annotations
+class HartleyViolinOrm(Base):
 
-__all__: list[str] = []
+    __abstract__ = True
+
+    

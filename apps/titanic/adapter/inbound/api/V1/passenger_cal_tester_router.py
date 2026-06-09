@@ -11,7 +11,7 @@ from titanic.dependencies.passenger_cal_tester_provider import get_cal_test_use_
 승객 입력값 유효성 검사를 담당합니다.
 '''
 
-cal_tester_router = APIRouter(prefix="/titanic/cal", tags=["cal"])
+cal_tester_router = APIRouter(prefix="/cal", tags=["cal"])
 
 
 @cal_tester_router.get("/myself")
