@@ -186,7 +186,7 @@ app.add_middleware(
 
 register_secom_routes(app)
 
-app.include_router(titanic_router)
+app.include_router(titanic_router, prefix="/api")
 
 
 @app.middleware("http")

@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field
 
+
 class SmithCaptainSchema(BaseModel):
     
     id: int = Field(0, description="Captain ID")
@@ -14,3 +15,16 @@ class SmithCaptainSchema(BaseModel):
             }
         }
     }
+
+
+class SmithChatRequest(BaseModel):
+    """스미스 선장 대화 — 사용자 메시지."""
+
+    message: str = Field(..., min_length=1, max_length=100_000)
+
+
+class SmithChatResponse(BaseModel):
+    """Gemini 가 생성한 선장 역할 답변."""
+
+    reply: str
+    model: str

@@ -8,10 +8,10 @@ from matrix.grid_neo_theone_base import Base
 
 class RoseModelOrm(Base):
     # James 업로드용 `BookingOrm` 과 테이블명 충돌 방지
-    __tablename__ = "rose_model_bookings"
+    __tablename__ = "bookings"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    person_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("persons.id"), nullable=True)
+    passenger_id: Mapped[str | None] = mapped_column(String, ForeignKey("passengers.passenger_id"), nullable=True)
     pclass: Mapped[str | None] = mapped_column(String, nullable=True)
     ticket: Mapped[str | None] = mapped_column(String, nullable=True)
     fare: Mapped[str | None] = mapped_column(String, nullable=True)

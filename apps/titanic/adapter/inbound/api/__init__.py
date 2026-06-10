@@ -44,6 +44,8 @@ from titanic.adapter.inbound.api.V1.passenger_ruth_validation_router import (
 # 레거시 별칭 (기존 `james_router` import 호환)
 james_router = crew_james_director_router
 
+# Vite(`www/vite.config.ts`)·게이트웨이 `location ^~ /titanic/` 가 URI 를 그대로 백엔드로 넘김.
+# `location /api/` 는 /api 접두사를 제거하므로 여기서 `/api/titanic` 을 쓰면 프록시 뒤에서 전부 404 가 납니다.
 titanic_router = APIRouter(prefix="/titanic", tags=["titanic"])
 
 
@@ -66,6 +68,7 @@ async def titanic_root() -> dict[str, str]:
             "molly_myself": "/titanic/molly/myself",
             "ruth_myself": "/titanic/ruth/myself",
             "smith_myself": "/titanic/smith/myself",
+            "smith_chat": "/titanic/smith/chat",
         },
     }
 

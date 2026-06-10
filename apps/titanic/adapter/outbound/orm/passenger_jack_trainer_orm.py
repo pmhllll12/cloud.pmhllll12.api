@@ -10,8 +10,8 @@ class JackTrainerOrm(Base):
     # 클래스명은 JackTrainerOrm이고, 테이블명은 passengers로 지정합니다.
     __tablename__ = "passengers"
 
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    passenger_id: Mapped[str | None] = mapped_column(String, nullable=True)
+    
+    passenger_id: Mapped[str | None] = mapped_column(String, primary_key=True, nullable=True)
     name: Mapped[str | None] = mapped_column(String, nullable=True)
     gender: Mapped[str | None] = mapped_column(String, nullable=True)
     age: Mapped[str | None] = mapped_column(String, nullable=True)
