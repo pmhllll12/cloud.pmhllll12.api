@@ -3,6 +3,7 @@ from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException
 
+
 from core.matrix.vault_keymaker_secret_manager import MissingApiKeyError, format_gemini_error, keymaker
 from titanic.adapter.inbound.api.schemas.crew_smith_captin_schemas import (
     SmithCaptainSchema,
@@ -52,18 +53,19 @@ def _extract_gemini_text(response: Any) -> str:
     return ""
 
 
-@smith_captain_router.post("/chat")
+@smith_captain_router.post("/chat", response_model=SmithChatResponse)
 async def chat(
+    schema: Annotated[ChatSchema, Body()],
     smith: SmithCaptainUseCase = Depends(get_smith_captain_use_case),
-) -> SmithCaptainResponse:
-   return None
+) -> SmithChatResponse:
+    return await smith.chat(schema)
 
 
 @smith_captain_router.get("/myself")
 async def introduce_myself(
     smith: SmithCaptainUseCase = Depends(get_smith_captain_use_case),
 ) -> SmithCaptainResponse:
-    return await james.introduce_myself(
+    return await smith.introduce_myself(
         SmithCaptainSchema(
             id=7,
             name="스미스 선장 (Captain Edward John Smith)",
