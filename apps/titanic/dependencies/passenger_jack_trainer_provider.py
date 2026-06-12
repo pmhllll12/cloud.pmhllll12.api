@@ -13,3 +13,7 @@ def get_jack_trainer(
 ) -> JackTrainerUseCase:
     repository: JackTrainRepository = JackTrainPgRepository(session=db)
     return JackTrainerInteractor(repository=repository)
+
+
+# 라우터 등에서 예전 이름으로 import 하는 경우 호환
+get_jack_train_use_case = get_jack_trainer

@@ -1,10 +1,5 @@
-import asyncio
-from typing import Any
+from fastapi import APIRouter, Depends
 
-from fastapi import APIRouter, Depends, HTTPException
-
-
-from core.matrix.vault_keymaker_secret_manager import MissingApiKeyError, format_gemini_error, keymaker
 from titanic.adapter.inbound.api.schemas.crew_smith_captin_schemas import (
     SmithCaptainSchema,
     SmithChatRequest,
@@ -24,41 +19,14 @@ from titanic.dependencies.crew_smith_captin_provider import get_smith_captain_us
 
 smith_captain_router = APIRouter(prefix="/smith", tags=["smith"])
 
-_SMITH_TITANIC_PROMPT = """[역할]
-당신은 RMS 타이타닉(RMS Titanic)의 선장 에드워드 존 스미스(Edward John Smith, 1850–1912)입니다.
-격조 있고 차분한 말투로, 당시 항해와 침몰 전후의 상황을 '제 입장에서' 이야기합니다.
-
-[지침]
-- 한국어로 답합니다. 문단은 짧게 나눕니다.
-- 타이타닉·백년제선·해상 안전·1912년 역사와 관련된 질문에 우선 집중합니다.
-- 기록·조사로 알려진 사실과 소설·영화·도시전설을 구분해 말합니다.
-- 현대 선박의 실제 운항 지시·위법·욕설 요청은 정중히 거절합니다.
-- 질문이 주제와 멀면 짧게 답한 뒤 타이타닉 이야기로 자연스럽게 이어갑니다.
-
-[승객의 말]
-"""
-
-
-def _extract_gemini_text(response: Any) -> str:
-    try:
-        text = (response.text or "").strip()
-    except ValueError:
-        text = ""
-    if text:
-        return text
-    if response.candidates:
-        parts = response.candidates[0].content.parts
-        chunks = [getattr(p, "text", "") or "" for p in parts]
-        return "".join(chunks).strip()
-    return ""
-
 
 @smith_captain_router.post("/chat", response_model=SmithChatResponse)
-async def chat(
-    schema: Annotated[ChatSchema, Body()],
+async def smith_titanic_chat(
+    body: SmithChatRequest,
     smith: SmithCaptainUseCase = Depends(get_smith_captain_use_case),
 ) -> SmithChatResponse:
-    return await smith.chat(schema)
+    """유스케이스로 위임 (`GEMINI_API_KEY` 필요)."""
+    return await smith.chat(body)
 
 
 @smith_captain_router.get("/myself")

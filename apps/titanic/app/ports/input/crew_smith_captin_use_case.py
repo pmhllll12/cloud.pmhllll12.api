@@ -2,7 +2,11 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 
-from titanic.adapter.inbound.api.schemas.crew_smith_captin_schemas import SmithCaptainSchema, ChatSchema
+from titanic.adapter.inbound.api.schemas.crew_smith_captin_schemas import (
+    SmithCaptainSchema,
+    SmithChatRequest,
+    SmithChatResponse,
+)
 from titanic.adapter.inbound.api.schemas.passenger_jack_trainer_schemas import JackTrainerSchema
 from titanic.adapter.inbound.api.schemas.passenger_rose_model_schemas import RoseModelSchema
 from titanic.app.dtos.crew_smith_captin_dto import SmithCaptainResponse
@@ -17,9 +21,16 @@ class SmithCaptainUseCase(ABC):
         pass
 
     @abstractmethod
-    async def chat(self, schema: ChatSchema, 
-                    jack: JackTrainerUseCase,
-                    rose: RoseModelUseCase,
-                    ) -> SmithCaptainResponse:
-        """사용자 자연어 입력을 받아 채팅 응답을 반환"""
+    async def introduce_crew_with_passengers(
+        self,
+        smith_schema: SmithCaptainSchema,
+        jack_schema: JackTrainerSchema,
+        rose_schema: RoseModelSchema,
+    ) -> tuple[SmithCaptainResponse, JackTrainerResponse, RoseModelResponse]:
+        """선장·잭·로즈 자기소개를 한 번에 실행합니다."""
+        pass
+
+    @abstractmethod
+    async def chat(self, body: SmithChatRequest) -> SmithChatResponse:
+        """사용자 자연어 입력을 받아 채팅 응답을 반환합니다."""
         pass

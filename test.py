@@ -14,7 +14,7 @@ load_dotenv(_root / "apps" / ".env")
 kiwi = Kiwi()
 
 # 레지스트리 기본 후보 (로컬에 없으면 _pick_model 이 설치된 모델로 대체)
-DEFAULT_OLLAMA_MODEL = "lancard/korean-yanolja-eeve:latest"
+DEFAULT_OLLAMA_MODEL = "qwen2.5:3b"
 
 _OLLAMA_MODEL_PLACEHOLDERS = frozenset(
     {
