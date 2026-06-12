@@ -1,3 +1,5 @@
+import logging
+
 from fastapi import APIRouter, Depends
 
 from titanic.adapter.inbound.api.schemas.crew_smith_captin_schemas import (
@@ -18,6 +20,7 @@ from titanic.dependencies.crew_smith_captin_provider import get_smith_captain_us
 '''
 
 smith_captain_router = APIRouter(prefix="/smith", tags=["smith"])
+logger = logging.getLogger(__name__)
 
 
 @smith_captain_router.post("/chat", response_model=SmithChatResponse)
@@ -26,6 +29,7 @@ async def smith_titanic_chat(
     smith: SmithCaptainUseCase = Depends(get_smith_captain_use_case),
 ) -> SmithChatResponse:
     """유스케이스로 위임 (`GEMINI_API_KEY` 필요)."""
+    logger.info("[smith/chat] message=%r", body.message)
     return await smith.chat(body)
 
 
