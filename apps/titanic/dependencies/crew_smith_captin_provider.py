@@ -12,10 +12,15 @@ from titanic.dependencies.passenger_jack_trainer_provider import get_jack_train_
 from titanic.dependencies.passenger_rose_model_provider import get_rose_model_use_case
 
 
-def get_smith_captain_use_case(
+def get_smith_captain_repository(
     db: AsyncSession = Depends(get_db),
+) -> SmithCaptainRepository:
+    return SmithCaptainPgRepository(session=db)
+
+
+def get_smith_captain_use_case(
+    repository: SmithCaptainRepository = Depends(get_smith_captain_repository),
     jack: JackTrainerUseCase = Depends(get_jack_train_use_case),
     rose: RoseModelUseCase = Depends(get_rose_model_use_case),
 ) -> SmithCaptainUseCase:
-    repository: SmithCaptainRepository = SmithCaptainPgRepository(session=db)
     return SmithCaptainInteractor(repository=repository, jack=jack, rose=rose)

@@ -8,12 +8,16 @@ from titanic.app.ports.output.passenger_jack_trainer_repository import JackTrain
 from titanic.app.use_cases.passenger_jack_trainer_interactor import JackTrainerInteractor
 
 
+def get_jack_trainer_repository(
+    db: AsyncSession = Depends(get_db),
+) -> JackTrainRepository:
+    return JackTrainPgRepository(session=db)
+
+
 def get_jack_trainer(
-        db: AsyncSession = Depends(get_db)
+    repository: JackTrainRepository = Depends(get_jack_trainer_repository),
 ) -> JackTrainerUseCase:
-    repository: JackTrainRepository = JackTrainPgRepository(session=db)
     return JackTrainerInteractor(repository=repository)
 
 
-# 라우터 등에서 예전 이름으로 import 하는 경우 호환
-get_jack_train_use_case = get_jack_trainer
+

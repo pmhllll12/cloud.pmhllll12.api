@@ -44,9 +44,7 @@ from titanic.adapter.inbound.api.V1.passenger_ruth_validation_router import (
 # 레거시 별칭 (기존 `james_router` import 호환)
 james_router = crew_james_director_router
 
-# Vite(`www/vite.config.ts`)·게이트웨이 `location ^~ /titanic/` 가 URI 를 그대로 백엔드로 넘김.
-# `location /api/` 는 /api 접두사를 제거하므로 여기서 `/api/titanic` 을 쓰면 프록시 뒤에서 전부 404 가 납니다.
-titanic_router = APIRouter(prefix="/titanic", tags=["titanic"])
+titanic_router = APIRouter(prefix="/api/titanic", tags=["titanic"])
 
 
 @titanic_router.get("/", summary="타이타닉 API 안내")
@@ -55,20 +53,20 @@ async def titanic_root() -> dict[str, str]:
     return {
         "message": "Titanic demo API",
         "paths": {
-            "james_myself": "/titanic/james/myself",
-            "james_upload": "/titanic/james/upload",
-            "rose_myself": "/titanic/rose/myself",
-            "walter_myself": "/titanic/walter/myself",
-            "andrews_myself": "/titanic/andrews/myself",
-            "cal_myself": "/titanic/cal/myself",
-            "hartley_myself": "/titanic/hartley/myself",
-            "lowe_myself": "/titanic/lowe/myself",
-            "isidor_myself": "/titanic/isidor/myself",
-            "jack_myself": "/titanic/jack/myself",
-            "molly_myself": "/titanic/molly/myself",
-            "ruth_myself": "/titanic/ruth/myself",
-            "smith_myself": "/titanic/smith/myself",
-            "smith_chat": "/titanic/smith/chat",
+            "james_myself": "/api/titanic/james/myself",
+            "james_upload": "/api/titanic/james/upload",
+            "rose_myself": "/api/titanic/rose/myself",
+            "walter_myself": "/api/titanic/walter/myself",
+            "andrews_myself": "/api/titanic/andrews/myself",
+            "cal_myself": "/api/titanic/cal/myself",
+            "hartley_myself": "/api/titanic/hartley/myself",
+            "lowe_myself": "/api/titanic/lowe/myself",
+            "isidor_myself": "/api/titanic/isidor/myself",
+            "jack_myself": "/api/titanic/jack/myself",
+            "molly_myself": "/api/titanic/molly/myself",
+            "ruth_myself": "/api/titanic/ruth/myself",
+            "smith_myself": "/api/titanic/smith/myself",
+            "smith_chat": "/api/titanic/smith/chat",
         },
     }
 

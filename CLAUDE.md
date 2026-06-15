@@ -67,9 +67,10 @@ docker compose up --build -d
 
 ## API 경로 (프록시와 맞출 것)
 
-- `titanic_router` prefix는 **`/titanic`** (`/api/titanic` 아님).
-- 게이트웨이 `location ^~ /titanic/` 과 Vite `www/vite.config.ts` 프록시가 **URI를 그대로** 백엔드로 넘긴다.
-- 예: `POST /titanic/smith/chat`, `POST /titanic/james/upload`
+- `titanic_router` prefix는 **`/api/titanic`**.
+- Vite `www/vite.config.ts` 프록시: `/api` → 백엔드 (URI 그대로 전달).
+- 게이트웨이 `location ^~ /api/` → 백엔드 (URI 그대로 전달, strip 없음).
+- 예: `POST /api/titanic/smith/chat`, `POST /api/titanic/james/upload`
 
 ---
 

@@ -1,13 +1,20 @@
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from titanic.adapter.outbound.pg.passenger_cal_tester_pg_repository import CalTestPgRepository
-from titanic.app.ports.output.passenger_cal_tester_repository import CalTestRepository
+
 from database import get_db
+from titanic.adapter.outbound.pg.passenger_cal_tester_pg_repository import CalTestPgRepository
 from titanic.app.ports.input.passenger_cal_tester_use_case import CalTesterUseCase
+from titanic.app.ports.output.passenger_cal_tester_repository import CalTestRepository
 from titanic.app.use_cases.passenger_cal_tester_interactor import CalTesterInteractor
 
+
+def get_cal_tester_repository(
+    db: AsyncSession = Depends(get_db),
+) -> CalTestRepository:
+    return CalTestPgRepository(session=db)
+
+
 def get_cal_test_use_case(
-        db: AsyncSession = Depends(get_db)
+    repository: CalTestRepository = Depends(get_cal_tester_repository),
 ) -> CalTesterUseCase:
-    repository: CalTestRepository = CalTestPgRepository(session=db)
     return CalTesterInteractor(repository=repository)
