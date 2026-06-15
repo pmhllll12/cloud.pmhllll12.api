@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import logging
 from typing import Any
 
 from fastapi import HTTPException
@@ -50,6 +51,9 @@ def _extract_gemini_text(response: Any) -> str:
     return ""
 
 
+logger = logging.getLogger(__name__)
+
+
 class SmithCaptainInteractor(SmithCaptainUseCase):
     """선장 유스케이스 — 잭·로즈와 조합 호출 가능."""
 
@@ -63,11 +67,6 @@ class SmithCaptainInteractor(SmithCaptainUseCase):
         self._jack = jack
         self._rose = rose
 
-    async def introduce_myself(self, schema: SmithCaptainSchema) -> SmithCaptainResponse:
-        return await self.repository.introduce_myself(
-            SmithCaptainQuery(id=schema.id, name=schema.name),
-        )
-
     async def introduce_crew_with_passengers(
         self,
         smith_schema: SmithCaptainSchema,
@@ -80,6 +79,7 @@ class SmithCaptainInteractor(SmithCaptainUseCase):
         return smith_r, jack_r, rose_r
 
     async def chat(self, body: SmithChatRequest) -> SmithChatResponse:
+        logger.info("[SmithCaptainInteractor/chat] message=%r", body.message)
         prompt = _SMITH_TITANIC_PROMPT + body.message.strip()
 
         def _generate() -> tuple[Any, str]:

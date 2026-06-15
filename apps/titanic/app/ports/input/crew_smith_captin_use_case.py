@@ -24,8 +24,8 @@ class SmithCaptainUseCase(ABC):
     async def introduce_crew_with_passengers(
         self,
         smith_schema: SmithCaptainSchema,
-        jack_schema: JackTrainerSchema,
-        rose_schema: RoseModelSchema,
+        jack_schema: JackTrainerUseCase,
+        rose_schema: RoseModelUseCase,
     ) -> tuple[SmithCaptainResponse, JackTrainerResponse, RoseModelResponse]:
         """선장·잭·로즈 자기소개를 한 번에 실행합니다."""
         pass
