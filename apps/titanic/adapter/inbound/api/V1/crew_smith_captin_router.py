@@ -23,11 +23,13 @@ smith_captain_router = APIRouter(prefix="/smith", tags=["smith"])
 
 @smith_captain_router.post("/chat", response_model=SmithChatResponse)
 async def smith_titanic_chat(
-    body: SmithChatRequest,
+    schema: Annotated[SmithChatRequest, Body()],
     smith: SmithCaptainUseCase = Depends(get_smith_captain_use_case),
 ) -> SmithChatResponse:
+    for msg in schema.messages:
+        logger.info("[smith/chat]" message from {msg.role}: {msg.content}")
     """유스케이스로 위임 (`GEMINI_API_KEY` 필요)."""
-    return await smith.chat(schema, jack, rose)
+    return await smith.chat(schema)
 
 
 @smith_captain_router.get("/myself")

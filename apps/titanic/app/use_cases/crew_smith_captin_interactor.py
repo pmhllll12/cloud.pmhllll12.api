@@ -9,6 +9,8 @@ from tailor.apps.titanic.app.dtos.crew_smith_captain_dto import SmithCaptainQuer
 from tailor.apps.titanic.app.ports.input.crew_smith_captain_use_case import SmithCaptainUseCase
 from tailor.apps.titanic.app.ports.input.passenger_jack_trainer_use_case import JackTrainerUseCase
 from tailor.apps.titanic.app.ports.input.passenger_rose_model_use_case import RoseModelUseCase
+from tailor.apps.titanic.app.ports.input.passenger_cal_tester_use_case import caltesterUseCase
+from tailor.apps.titanic.app.ports.input.crew_walter_roaster_use_case import walterroasterUseCase
 from tailor.apps.titanic.app.ports.output.crew_smith_captain_repository import SmithCaptainRepository
 from tailor.apps.titanic.app.use_cases.passenger_jack_trainer_interactor import JackTrainerInteractor
 from tailor.apps.titanic.app.use_cases.passenger_rose_model_interactor import RoseModelInteractor
@@ -21,14 +23,19 @@ class SmithCaptainInteractor(SmithCaptainUseCase):
 
     def __init__(self, repository: SmithCaptainRepository):
         self.repository = repository
-  
+        self.jack: JackTrainerUseCase = Depends(get_jack_trainer_use_case),
+        self.rose: RoseModelUseCase = Depends(get_rose_model_use_case),
+        self.cal: CalTesterUseCase = Depends(get_cal_tester_use_case)
+        self.walter: walterroasterUseCase = Depends(get_walter_roaster_use_case)
 
-    async def chat(self, schema: ChatSchema,
-                   jack: JackTrainerUseCase = Depends(get_jack_trainer_use_case),
-                   rose: RoseModelUseCase = Depends(get_rose_model_use_case)
-                   ) -> ChatResponse:
+
+    async def chat(self, schema: ChatSchema) -> ChatResponse:
         logger.info(f"[SmithCaptainInteractor] chat 진입 | messages={schema.messages}")
-
+        train_set = self.walter.get_train_set()
+        test_set = self.walter.get_test_set()
+        self.jack.train_model(train_set)
+        self.cal.test_model(test_set)
+        
         return "1309명 입니다"
 
 
