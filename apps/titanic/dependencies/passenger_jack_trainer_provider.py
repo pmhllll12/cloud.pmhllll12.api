@@ -14,7 +14,7 @@ def get_jack_trainer_repository(
     return JackTrainPgRepository(session=db)
 
 
-def get_jack_trainer(
+def get_jack_train_use_case(
     repository: JackTrainRepository = Depends(get_jack_trainer_repository),
 ) -> JackTrainerUseCase:
     return JackTrainerInteractor(repository=repository)

@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field
 
 
 class SmithCaptainSchema(BaseModel):
-    id: str = Field(0, description="Captain ID")
+    id: int = Field(0, description="Captain ID")
     name: str = Field("에드워드 스미스", description="Captain's name")
 
     model_config = {
@@ -17,7 +17,7 @@ class SmithCaptainSchema(BaseModel):
 class SmithChatRequest(BaseModel):
     """POST /smith/chat 본문 — 사용자 자연어."""
 
-    message: "str = Field(..., min_length=1, max_length=100_000)"
+    message: str = Field(..., min_length=1, max_length=100_000)
 
 
 class SmithChatResponse(BaseModel):

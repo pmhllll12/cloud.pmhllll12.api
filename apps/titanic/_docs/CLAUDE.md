@@ -86,3 +86,13 @@ titanic_router = APIRouter(prefix="/titanic", tags=["titanic"])
 ## README (레거시 맵)
 
 구 파일명 매핑 ---> [`../README.md`](../README.md)
+
+## 타이타닉 도메인 문서 연결
+
+*타이타닉 도메인 문서연결
+*타이타닉 피처 정리 : [[titanic-features]]
+*타이타닉 머신러닝 : [[titanic-machine-learning]]
+*타이타닉 ERD : [[titanic-erd]]
+*타이타닉 알고리즘 : [[titanic-algorithm]]
+*타이타닉 NF : [[titanic-nf]]
+
