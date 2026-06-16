@@ -19,8 +19,12 @@ def get_smith_captain_repository(
 
 
 def get_smith_captain_use_case(
-    repository: SmithCaptainRepository = Depends(get_smith_captain_repository),
-    jack: JackTrainerUseCase = Depends(get_jack_train_use_case),
-    rose: RoseModelUseCase = Depends(get_rose_model_use_case),
+        repository: SmithCaptainRepository = Depends(get_smith_captain_repository),
+        jack: JackTrainerUseCase = Depends(get_jack_trainer_use_case),
+        rose: RoseModelUseCase = Depends(get_rose_model_use_case),
+        cal: CalTesterUseCase = Depends(get_cal_tester_use_case),
+        walter: WalterRoasterUseCase = Depends(get_walter_roaster_use_case)
 ) -> SmithCaptainUseCase:
-    return SmithCaptainInteractor(repository=repository, jack=jack, rose=rose)
+
+    return SmithCaptainInteractor(
+        repository=repository, jack=jack, rose=rose, cal=cal, walter=walter   )

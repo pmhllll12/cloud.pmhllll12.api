@@ -22,11 +22,10 @@ logger = logging.getLogger(__name__)
 class SmithCaptainInteractor(SmithCaptainUseCase):
 
     def __init__(self, repository: SmithCaptainRepository):
-        self.repository = repository
-        self.jack: JackTrainerUseCase = Depends(get_jack_trainer_use_case),
-        self.rose: RoseModelUseCase = Depends(get_rose_model_use_case),
-        self.cal: CalTesterUseCase = Depends(get_cal_tester_use_case)
-        self.walter: walterroasterUseCase = Depends(get_walter_roaster_use_case)
+        self.jack: JackTrainerUseCase,
+        self.rose: RoseModelUseCase,
+        self.cal: CalTesterUseCase,
+        self.walter: WalterRoasterUseCase
 
 
     async def chat(self, schema: ChatSchema) -> ChatResponse:
@@ -35,7 +34,7 @@ class SmithCaptainInteractor(SmithCaptainUseCase):
         test_set = self.walter.get_test_set()
         self.jack.train_model(train_set)
         self.cal.test_model(test_set)
-        
+
         return "1309명 입니다"
 
 
