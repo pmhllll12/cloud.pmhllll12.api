@@ -3,11 +3,11 @@ from __future__ import annotations
 from titanic.adapter.inbound.api.schemas.crew_hartley_violin_schemas import HartleyViolinSchema
 from titanic.app.dtos.crew_hartley_violin_dto import HartleyViolinQuery, HartleyViolinResponse
 from titanic.app.ports.input.crew_hartley_violin_use_case import HartleyViolinUseCase
-from titanic.app.ports.output.crew_hartley_violin_repository import HartleyViolinRepository
+from titanic.app.ports.output.crew_hartley_violin_port import HartleyViolinPort
 
 
 class HartleyViolinInteractor(HartleyViolinUseCase):
-    def __init__(self, repository: HartleyViolinRepository) -> None:
+    def __init__(self, repository: HartleyViolinPort) -> None:
         self.repository = repository
 
     async def introduce_myself(self, schema: HartleyViolinSchema) -> HartleyViolinResponse:

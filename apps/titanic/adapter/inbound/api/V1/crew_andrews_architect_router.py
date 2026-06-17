@@ -1,3 +1,4 @@
+from fastapi import APIRouter
 from fastapi import APIRouter, Depends
 
 from titanic.adapter.inbound.api.schemas.crew_andrews_architect_schemas import AndrewsArchitectSchema
@@ -22,4 +23,3 @@ async def introduce_myself(
             name="토마스 앤드류스 (Thomas Andrews)"
         )
     )
-

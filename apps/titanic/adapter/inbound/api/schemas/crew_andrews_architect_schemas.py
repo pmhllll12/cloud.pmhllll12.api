@@ -14,3 +14,5 @@ class AndrewsArchitectSchema(BaseModel):
             }
         }
     }
+class AndrewsJuniorSchema(AndrewsArchitectSchema):    
+    address: str = ...

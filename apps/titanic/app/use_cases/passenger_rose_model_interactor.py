@@ -19,7 +19,7 @@ from xgboost import XGBClassifier
 from titanic.adapter.inbound.api.schemas.passenger_rose_model_schemas import RoseModelSchema
 from titanic.app.dtos.passenger_rose_model_dto import RoseModelQuery, RoseModelResponse
 from titanic.app.ports.input.passenger_rose_model_use_case import RoseModelStrategy, RoseModelUseCase
-from titanic.app.ports.output.passenger_rose_model_repository import RoseModelRepository
+from titanic.app.ports.output.passenger_rose_model_port import RoseModelPort
 
 
 class LogisticRegressionStrategy(RoseModelStrategy):
@@ -208,7 +208,7 @@ def create_strategy(name: str) -> RoseModelStrategy:
 class RoseModelInteractor(RoseModelUseCase):
     def __init__(
         self,
-        repository: RoseModelRepository,
+        repository: RoseModelPort,
         strategy: RoseModelStrategy | None = None,
     ) -> None:
         self.repository = repository

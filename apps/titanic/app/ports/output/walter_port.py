@@ -14,7 +14,7 @@ class WalterPersistPayload:
 
 
 @runtime_checkable
-class WalterRepositoryPort(Protocol):
+class WalterPort(Protocol):
     """Neon `titanic_walter_passengers` 등에 대한 비동기 저장·조회."""
 
     async def persist_payload(self, payload: WalterPersistPayload) -> int:
@@ -45,17 +45,17 @@ class WalterRepositoryPort(Protocol):
         ...
 
 
-async def submit_persist_upload(repository: WalterRepositoryPort, payload: WalterPersistPayload) -> int:
+async def submit_persist_upload(repository: WalterPort, payload: WalterPersistPayload) -> int:
     return await repository.persist_payload(payload)
 
 
-async def submit_fetch_all_passengers(repository: WalterRepositoryPort) -> list[dict[str, Any]]:
+async def submit_fetch_all_passengers(repository: WalterPort) -> list[dict[str, Any]]:
     return await repository.load_all_rows()
 
 
 __all__ = [
     "WalterPersistPayload",
-    "WalterRepositoryPort",
+    "WalterPort",
     "submit_fetch_all_passengers",
     "submit_persist_upload",
 ]

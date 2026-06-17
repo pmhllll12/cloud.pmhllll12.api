@@ -1,8 +1,8 @@
 """Titanic application output ports."""
 
-from titanic.app.ports.output.walter_repository import (
+from titanic.app.ports.output.walter_port import (
     WalterPersistPayload,
-    WalterRepositoryPort,
+    WalterPort,
     submit_fetch_all_passengers,
     submit_persist_upload as submit_walter_persist_upload,
 )
@@ -10,6 +10,6 @@ from titanic.app.ports.output.walter_repository import (
 __all__ = [
     "submit_walter_persist_upload",
     "WalterPersistPayload",
-    "WalterRepositoryPort",
+    "WalterPort",
     "submit_fetch_all_passengers",
 ]

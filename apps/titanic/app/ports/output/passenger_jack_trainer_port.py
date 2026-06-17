@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 from titanic.app.dtos.passenger_jack_trainer_dto import JackTrainerQuery, JackTrainerResponse
 
 
-class JackTrainRepository(ABC):
+class JackTrainerPort(ABC):
     @abstractmethod
     async def introduce_myself(self, query: JackTrainerQuery) -> JackTrainerResponse:
         raise NotImplementedError

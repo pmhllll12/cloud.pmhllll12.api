@@ -7,13 +7,13 @@ from titanic.adapter.inbound.api.schemas.passenger_cal_tester_schemas import Cal
 from titanic.app.dtos.passenger_cal_tester_dto import CalTesterQuery, CalTesterResponse
 from titanic.app.ports.input.passenger_cal_tester_use_case import CalTesterUseCase
 from titanic.app.ports.input.passenger_jack_trainer_use_case import JackTrainerUseCase
-from titanic.app.ports.output.passenger_cal_tester_repository import CalTestRepository
+from titanic.app.ports.output.passenger_cal_tester_port import CalTestPort
 
 logger = logging.getLogger(__name__)
 
 
 class CalTesterInteractor(CalTesterUseCase):
-    def __init__(self, repository: CalTestRepository, jack: JackTrainerUseCase) -> None:
+    def __init__(self, repository: CalTestPort, jack: JackTrainerUseCase) -> None:
         self.repository = repository
         self.jack = jack
 

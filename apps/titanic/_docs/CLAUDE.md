@@ -87,6 +87,21 @@ titanic_router = APIRouter(prefix="/titanic", tags=["titanic"])
 
 구 파일명 매핑 ---> [`../README.md`](../README.md)
 
+## async 규칙
+
+| 메소드 성격 | 형태 | 근거 |
+|------------|------|------|
+| CPU-bound (Kiwi 등 연산) | `def` | `async`를 붙여도 이벤트 루프 블로킹은 동일 |
+| I/O-bound (DB·LLM·네트워크) | `async def` | `await` 가능한 호출이 있을 때만 |
+
+Kiwi 처리가 무거워 이벤트 루프 블로킹이 문제가 된다면, `async def`로 바꾸는 대신 **호출 측**에서 스레드풀에 위임한다:
+
+```python
+result = await asyncio.to_thread(use_case.analyze_intent, question)
+```
+
+---
+
 ## 타이타닉 도메인 문서 연결
 
 *타이타닉 도메인 문서연결
@@ -95,4 +110,6 @@ titanic_router = APIRouter(prefix="/titanic", tags=["titanic"])
 *타이타닉 ERD : [[titanic-erd]]
 *타이타닉 알고리즘 : [[titanic-algorithm]]
 *타이타닉 NF : [[titanic-nf]]
+
+
 
