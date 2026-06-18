@@ -15,6 +15,11 @@ class AndrewsArchitectUseCase(ABC):
         pass
 
     @abstractmethod
+    def extract_passenger_profile(self, message: str) -> dict[str, Any]:
+        '''생존 예측 질의 문장에서 나이·성별 등 승객 프로필을 추출하는 추상 메소드'''
+        pass
+
+    @abstractmethod
     async def introduce_myself(self, schema: AndrewsArchitectSchema) -> AndrewsArchitectResponse:
         '''앤드류 아키텍트의 자기소개 메소드'''
         pass

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import re
 from typing import Any
 
 from kiwipiepy import Kiwi
@@ -12,6 +13,12 @@ from titanic.app.ports.input.crew_andrews_architect_use_case import AndrewsArchi
 from titanic.app.ports.output.crew_andrews_architect_port import AndrewsArchitectPort
 
 logger = logging.getLogger(__name__)
+
+_AGE_PATTERN = re.compile(r"(\d{1,3})\s*(?:세|살)")
+_FEMALE_KEYWORDS = ("여자", "여성", "소녀", "female", "woman")
+_MALE_KEYWORDS = ("남자", "남성", "소년", "male", "man")
+# "남자 여자 명수랑 비율 알려줘"처럼 집계를 묻는 문장은 한 명의 가상 승객 프로필이 아니므로 제외
+_STATISTICS_OVERRIDE_KEYWORDS = ("몇명", "명수", "비율", "통계", "분포", "총원", "전체", "합계", "평균")
 
 
 class AndrewsArchitectInteractor(AndrewsArchitectUseCase):
@@ -52,6 +59,28 @@ class AndrewsArchitectInteractor(AndrewsArchitectUseCase):
             "scores": scores,
             "tokens": [(t.form, str(t.tag)) for t in tokens],
         }
+
+    def extract_passenger_profile(self, message: str) -> dict[str, Any]:
+        '''생존 예측 질의 문장에서 나이·성별 등 승객 프로필을 추출 (예: "33세 남자" → {"Age": 33.0, "gender": 0})
+
+        "명수/비율" 등 집계를 묻는 문장은 가상의 한 승객을 가리키는 게 아니므로 빈 dict를 반환한다.
+        '''
+        if any(keyword in message for keyword in _STATISTICS_OVERRIDE_KEYWORDS):
+            return {}
+
+        profile: dict[str, Any] = {}
+
+        age_match = _AGE_PATTERN.search(message)
+        if age_match:
+            profile["Age"] = float(age_match.group(1))
+
+        lowered = message.lower()
+        if any(keyword in message for keyword in _FEMALE_KEYWORDS) or any(keyword in lowered for keyword in ("female", "woman")):
+            profile["gender"] = 1
+        elif any(keyword in message for keyword in _MALE_KEYWORDS) or any(keyword in lowered for keyword in ("male", "man")):
+            profile["gender"] = 0
+
+        return profile
 
     async def introduce_myself(self, schema: AndrewsArchitectSchema) -> AndrewsArchitectResponse:
         '''앤드류 설계자의 자기소개 인터렉트'''

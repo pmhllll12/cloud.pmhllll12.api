@@ -1,6 +1,6 @@
 INTENT_MAP: dict[str, set[str]] = {
     "SURVIVAL_PREDICT": {
-        "생존", "사망", "살아남", "죽", "예측", "예상", "확률", "살았", "죽었",
+        "생존", "사망", "살아남", "죽", "예측", "예상", "확률", "살았", "죽었", "살",
         "survive", "survived", "dead", "alive", "predict", "probability",
     },
     "STATISTICS": {
