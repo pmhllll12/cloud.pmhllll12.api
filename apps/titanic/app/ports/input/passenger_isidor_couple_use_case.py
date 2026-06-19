@@ -10,6 +10,6 @@ from titanic.app.dtos.passenger_isidor_couple_dto import IsidorCoupleResponse
 class IsidorCoupleUseCase(ABC):
 
     @abstractmethod
-    async def introduce_myself(self, schema: IsidorBedSchema) -> IsidorCoupleResponse:
+    def introduce_myself(self, schema: IsidorBedSchema) -> IsidorCoupleResponse:
         '''이시도어 커플의 자기소개 메소드'''
         pass

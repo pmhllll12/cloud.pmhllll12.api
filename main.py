@@ -54,6 +54,7 @@ from adapters.weather_adapter import fetch_seoul_weather
 from database import dispose_engine, get_db
 
 from core.matrix.vault_keymaker_secret_manager import MissingApiKeyError, format_gemini_error, keymaker
+from silicon_valley.adapter.inbound.api import silicon_valley_router
 from titanic.adapter.inbound.api import titanic_router
 
 try:
@@ -187,6 +188,7 @@ app.add_middleware(
 register_secom_routes(app)
 
 app.include_router(titanic_router)
+app.include_router(silicon_valley_router)
 
 
 @app.middleware("http")
