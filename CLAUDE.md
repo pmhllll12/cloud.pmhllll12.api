@@ -2,8 +2,8 @@
 
 FastAPI 백엔드 워크스페이스. 진입점은 [`main.py`](main.py) 이고, 도메인 코드는 [`apps/`](apps/) 아래 **시블링 앱**으로 둔다.
 
-공통 4원칙 전문 ---> [`../vault/CLAUDE.md`](../vault/CLAUDE.md)  
-에이전트 하네스 ---> [`../vault/AGENTS.md`](../vault/AGENTS.md)  
+공통 4원칙 전문 ---> [`../_docs/CLAUDE.md`](../_docs/CLAUDE.md)  
+에이전트 하네스 ---> [`../_docs/AGENTS.md`](../_docs/AGENTS.md)  
 모노레포 지도 ---> [`../CLAUDE.md`](../CLAUDE.md)
 
 ---
@@ -74,11 +74,11 @@ docker compose up --build -d
 
 ---
 
-## 백엔드 규약 (vault)
+## 백엔드 규약 (`_docs`)
 
 | 주제 | 정본 |
 |------|------|
-| 엔티티·PK | [`../vault/DevOps/Backend/ENTITY_RULE.md`](../vault/DevOps/Backend/ENTITY_RULE.md) |
+| 엔티티·PK | [`_docs/entity-rules.md`](_docs/entity-rules.md) |
 | Alembic | [`alembic/README.md`](alembic/README.md) |
 
 ---
