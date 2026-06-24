@@ -1,8 +1,9 @@
-from __future__ import annotations
-
 from dataclasses import dataclass
 
 
 @dataclass
 class BighettiHrEntity:
-    """넬슨 '빅헤드' 비게티 설계용 도메인 자리표시자 — ORM 이 `__abstract__` 일 때 사용."""
+
+    route: str = "bighetti"
+    english_name: str = "Nelson 'Big Head' Bighetti"
+    korean_name: str = "넬슨 '빅헤드' 비게티"

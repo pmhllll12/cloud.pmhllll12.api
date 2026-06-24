@@ -40,7 +40,7 @@ install_secom_aliases()
 if sys.platform == "win32":
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
-from contextlib import asynccontextmanager
+from contextlib import AsyncExitStack, asynccontextmanager
 from typing import Any
 
 from fastapi import Depends, FastAPI, HTTPException, Request
@@ -55,7 +55,25 @@ from database import dispose_engine, get_db
 
 from core.matrix.vault_keymaker_secret_manager import MissingApiKeyError, format_gemini_error, keymaker
 from silicon_valley.adapter.inbound.api import silicon_valley_router
+from silicon_valley.dependencies.providers import get_n8n_client
+from silicon_valley.adapter.inbound.mcp.piper_bighetti_hr_tools import mcp as bighetti_mcp
+from silicon_valley.adapter.inbound.mcp.piper_dinesh_dash_tools import mcp as dinesh_mcp
+from silicon_valley.adapter.inbound.mcp.piper_dunn_coo_tools import mcp as dunn_mcp
+from silicon_valley.adapter.inbound.mcp.piper_gilfoyle_system_tools import mcp as gilfoyle_mcp
+from silicon_valley.adapter.inbound.mcp.piper_hendricks_ceo_tools import mcp as hendricks_mcp
 from titanic.adapter.inbound.api import titanic_router
+
+# 캐릭터별 MCP 서버 — 마운트 경로(prefix), FastMCP 인스턴스, Streamable HTTP ASGI 앱
+_SILICON_VALLEY_MCP_SERVERS = tuple(
+    (prefix, server, server.streamable_http_app())
+    for prefix, server in (
+        ("/mcp/hendricks", hendricks_mcp),
+        ("/mcp/bighetti", bighetti_mcp),
+        ("/mcp/dinesh", dinesh_mcp),
+        ("/mcp/gilfoyle", gilfoyle_mcp),
+        ("/mcp/dunn", dunn_mcp),
+    )
+)
 
 try:
     from secom.app.controllers.user_controller import UserController, register_secom_routes
@@ -170,7 +188,10 @@ async def lifespan(app: FastAPI):
         "자세한 안내: frontend/DEV_SERVER.md"
     )
     try:
-        yield
+        async with AsyncExitStack() as mcp_stack:
+            for _prefix, server, _http_app in _SILICON_VALLEY_MCP_SERVERS:
+                await mcp_stack.enter_async_context(server.session_manager.run())
+            yield
     finally:
         await dispose_engine()
 
@@ -189,6 +210,9 @@ register_secom_routes(app)
 
 app.include_router(titanic_router)
 app.include_router(silicon_valley_router)
+
+for _mcp_prefix, _mcp_server, _mcp_http_app in _SILICON_VALLEY_MCP_SERVERS:
+    app.mount(_mcp_prefix, _mcp_http_app)
 
 
 @app.middleware("http")
@@ -279,6 +303,10 @@ async def signup(
             status_code=503,
             detail="데이터베이스 연결 오류입니다. 잠시 후 다시 시도하세요.",
         ) from exc
+
+    await get_n8n_client().send_event(
+        {"message": f"새 회원가입: user_id={body.user_id.strip()} email={email}"}
+    )
 
     return SignupResponse(
         ok=True,

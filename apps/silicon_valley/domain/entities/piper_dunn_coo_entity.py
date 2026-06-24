@@ -1,8 +1,9 @@
-from __future__ import annotations
-
 from dataclasses import dataclass
 
 
 @dataclass
 class DunnCooEntity:
-    """자레드 던 설계용 도메인 자리표시자 — ORM 이 `__abstract__` 일 때 사용."""
+
+    route: str = "dunn"
+    english_name: str = "Jared Dunn"
+    korean_name: str = "자레드 던"
