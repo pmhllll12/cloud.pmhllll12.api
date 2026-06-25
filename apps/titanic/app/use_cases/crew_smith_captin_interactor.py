@@ -5,8 +5,11 @@ import logging
 
 import pandas as pd
 from pandas import DataFrame
-
-from titanic.adapter.inbound.api.schemas.crew_smith_captin_schemas import SmithCaptainSchema, SmithChatRequest, SmithChatResponse
+from titanic.adapter.inbound.api.schemas.crew_smith_captin_schemas import (
+    SmithCaptainSchema,
+    SmithChatRequest,
+    SmithChatResponse,
+)
 from titanic.app.dtos.crew_smith_captin_dto import SmithCaptainQuery, SmithCaptainResponse
 from titanic.app.ports.input.crew_andrews_architect_use_case import AndrewsArchitectUseCase
 from titanic.app.ports.input.crew_hartley_violin_use_case import HartleyViolinUseCase

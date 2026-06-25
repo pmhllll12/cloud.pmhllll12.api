@@ -1,11 +1,13 @@
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-
-from database import get_db
-from titanic.adapter.outbound.repositories.passenger_molly_scaler_repository import MollyScalerRepository
+from titanic.adapter.outbound.repositories.passenger_molly_scaler_repository import (
+    MollyScalerRepository,
+)
 from titanic.app.ports.input.passenger_molly_scaler_use_case import MollyScalerUseCase
 from titanic.app.ports.output.passenger_molly_scaler_port import MollyScalerPort
 from titanic.app.use_cases.passenger_molly_scaler_interactor import MollyScalerInteractor
+
+from database import get_db
 
 
 def get_molly_scaler_repository(

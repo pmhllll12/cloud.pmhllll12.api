@@ -2,10 +2,8 @@ from __future__ import annotations
 
 import io
 from abc import ABC, abstractmethod
-from typing import Any
 
 from pandas import DataFrame
-
 from titanic.adapter.inbound.api.schemas.crew_hartley_violin_schemas import HartleyViolinSchema
 from titanic.app.dtos.crew_hartley_violin_dto import HartleyViolinResponse
 

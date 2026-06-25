@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 
 from dotenv import load_dotenv
+
 # `backend/apps/.env` (Keymaker와 동일 경로 — DB URL 등 공통 env)
 _APPS_ROOT = Path(__file__).resolve().parent.parent
 load_dotenv(_APPS_ROOT / ".env")

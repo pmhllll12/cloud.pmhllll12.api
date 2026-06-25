@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends
-
 from silicon_valley.adapter.inbound.schema.piper_bighetti_hr_schema import BighettiHrSchema
 from silicon_valley.app.dtos.piper_bighetti_hr_dto import BighettiHrResponse
 from silicon_valley.app.ports.input.piper_bighetti_hr_use_case import BighettiHrUseCase

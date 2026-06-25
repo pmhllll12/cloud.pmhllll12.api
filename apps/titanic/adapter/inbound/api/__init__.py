@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from fastapi import APIRouter
-
 from titanic.adapter.inbound.api.V1.crew_andrews_architect_router import (
     andrews_architect_router as crew_andrews_architect_router,
 )

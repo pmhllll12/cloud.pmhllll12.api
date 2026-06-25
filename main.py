@@ -43,25 +43,28 @@ if sys.platform == "win32":
 from contextlib import AsyncExitStack, asynccontextmanager
 from typing import Any
 
+from adapters.db_health_adapter import DbHealthAdapter
+from adapters.weather_adapter import fetch_seoul_weather
 from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, ConfigDict, Field
-from sqlalchemy.exc import IntegrityError, SQLAlchemyError
-from sqlalchemy.ext.asyncio import AsyncSession
-
-from adapters.db_health_adapter import DbHealthAdapter
-from adapters.weather_adapter import fetch_seoul_weather
-from database import dispose_engine, get_db
-
-from core.matrix.vault_keymaker_secret_manager import MissingApiKeyError, format_gemini_error, keymaker
 from silicon_valley.adapter.inbound.api import silicon_valley_router
-from silicon_valley.dependencies.providers import get_n8n_client
 from silicon_valley.adapter.inbound.mcp.piper_bighetti_hr_tools import mcp as bighetti_mcp
 from silicon_valley.adapter.inbound.mcp.piper_dinesh_dash_tools import mcp as dinesh_mcp
 from silicon_valley.adapter.inbound.mcp.piper_dunn_coo_tools import mcp as dunn_mcp
 from silicon_valley.adapter.inbound.mcp.piper_gilfoyle_system_tools import mcp as gilfoyle_mcp
 from silicon_valley.adapter.inbound.mcp.piper_hendricks_ceo_tools import mcp as hendricks_mcp
+from silicon_valley.dependencies.providers import get_n8n_client
+from sqlalchemy.exc import IntegrityError, SQLAlchemyError
+from sqlalchemy.ext.asyncio import AsyncSession
 from titanic.adapter.inbound.api import titanic_router
+
+from core.matrix.vault_keymaker_secret_manager import (
+    MissingApiKeyError,
+    format_gemini_error,
+    keymaker,
+)
+from database import dispose_engine, get_db
 
 # 캐릭터별 MCP 서버 — 마운트 경로(prefix), FastMCP 인스턴스, Streamable HTTP ASGI 앱
 _SILICON_VALLEY_MCP_SERVERS = tuple(
@@ -78,8 +81,8 @@ _SILICON_VALLEY_MCP_SERVERS = tuple(
 try:
     from secom.app.controllers.user_controller import UserController, register_secom_routes
     from secom.app.repositories.user_repository import UserRepository
-    from secom.schemas.user_schemas import UserSchemas
     from secom.app.services.user_service import UserService
+    from secom.schemas.user_schemas import UserSchemas
 except ModuleNotFoundError:
     SECOM_AVAILABLE = False
 

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Any
 
 from titanic.adapter.inbound.api.schemas.passenger_cal_tester_schemas import CalTesterSchema
 from titanic.app.dtos.passenger_cal_tester_dto import CalTesterResponse

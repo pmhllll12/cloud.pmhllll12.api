@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field
 
+
 class DunnCooSchema(BaseModel):
 
     route: str = Field("dunn", description="API route segment")

@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import Optional
 
 from pydantic import BaseModel, Field
 
@@ -8,7 +7,7 @@ class ProductSchema(BaseModel):
     id: int = Field(0, description="Product ID")
     admin_id: int = Field(0, description="Admin ID who registered the product (FK → ADMINS.id)")
     name: str = Field("", description="Product name")
-    description: Optional[str] = Field(None, description="Product description")
+    description: str | None = Field(None, description="Product description")
     required_point: int = Field(0, description="Points required to redeem")
     stock: int = Field(0, description="Available stock")
     created_at: datetime = Field(..., description="Product registration time")
@@ -30,7 +29,7 @@ class ProductSchema(BaseModel):
 
 class ProductCreateSchema(BaseModel):
     name: str = Field(..., min_length=1, max_length=100)
-    description: Optional[str] = Field(None, max_length=500)
+    description: str | None = Field(None, max_length=500)
     required_point: int = Field(..., ge=0)
     stock: int = Field(..., ge=0)
 

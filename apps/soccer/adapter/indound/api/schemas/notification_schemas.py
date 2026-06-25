@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import Optional
 
 from pydantic import BaseModel, Field
 
@@ -11,7 +10,7 @@ class NotificationSchema(BaseModel):
     title: str = Field("", description="Notification title")
     content: str = Field("", description="Notification content")
     status: str = Field("unread", description="Status: unread | read")
-    sent_at: Optional[datetime] = Field(None, description="Time when notification was sent")
+    sent_at: datetime | None = Field(None, description="Time when notification was sent")
     created_at: datetime = Field(..., description="Notification creation time")
 
     model_config = {

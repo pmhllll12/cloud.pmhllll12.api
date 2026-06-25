@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field
 
+
 class BighettiHrSchema(BaseModel):
 
     route: str = Field("bighetti", description="API route segment")

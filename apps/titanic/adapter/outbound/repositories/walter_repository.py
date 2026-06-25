@@ -8,7 +8,6 @@ from typing import Any
 from sqlalchemy import delete, select
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
-
 from titanic.adapter.outbound.orm.walter_passenger_orm import WalterPassenger
 from titanic.app.ports.output.walter_port import (
     WalterPersistPayload,
@@ -68,7 +67,7 @@ async def ingest_fetch_all_passengers(session: AsyncSession) -> list[dict[str, A
 
 
 async def receive_persist_from_port(
-    repository: "WalterRepository",
+    repository: WalterRepository,
     payload: WalterPersistPayload,
 ) -> int:
     """출력 포트 `submit_persist_upload` → PG 어댑터 수신."""
@@ -80,7 +79,7 @@ async def receive_persist_from_port(
     return await repository.persist_payload(payload)
 
 
-async def receive_fetch_from_port(repository: "WalterRepository") -> list[dict[str, Any]]:
+async def receive_fetch_from_port(repository: WalterRepository) -> list[dict[str, Any]]:
     """출력 포트 `submit_fetch_all_passengers` → PG 어댑터 수신."""
     logger.info("[walter_repository] 수신 — fetch_all")
     return await repository.load_all_rows()

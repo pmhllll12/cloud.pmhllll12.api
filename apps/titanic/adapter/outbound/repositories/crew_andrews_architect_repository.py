@@ -5,9 +5,11 @@ from typing import Any
 
 from kiwipiepy import Kiwi
 from sqlalchemy.ext.asyncio import AsyncSession
-
 from titanic.app.constants.intent_map import INTENT_MAP
-from titanic.app.dtos.crew_andrews_architect_dto import AndrewsArchitectQuery, AndrewsArchitectResponse
+from titanic.app.dtos.crew_andrews_architect_dto import (
+    AndrewsArchitectQuery,
+    AndrewsArchitectResponse,
+)
 from titanic.app.ports.output.crew_andrews_architect_port import AndrewsArchitectPort
 
 logger = logging.getLogger(__name__)

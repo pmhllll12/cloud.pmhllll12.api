@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import Optional
 
 from pydantic import BaseModel, Field
 
@@ -11,9 +10,9 @@ class MatchSchema(BaseModel):
     venue: str = Field("", description="Venue name")
     home_team_id: int = Field(0, description="Home team ID (FK → TEAMS.id)")
     away_team_id: int = Field(0, description="Away team ID (FK → TEAMS.id)")
-    home_score: Optional[int] = Field(None, description="Home team score")
-    away_score: Optional[int] = Field(None, description="Away team score")
-    referee_id: Optional[int] = Field(None, description="Referee ID (FK → REFEREES.id)")
+    home_score: int | None = Field(None, description="Home team score")
+    away_score: int | None = Field(None, description="Away team score")
+    referee_id: int | None = Field(None, description="Referee ID (FK → REFEREES.id)")
 
     model_config = {
         "json_schema_extra": {
@@ -38,7 +37,7 @@ class MatchCreateSchema(BaseModel):
     venue: str = Field(..., max_length=100)
     home_team_id: int
     away_team_id: int
-    referee_id: Optional[int] = None
+    referee_id: int | None = None
 
 
 class MatchScoreUpdateSchema(BaseModel):

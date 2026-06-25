@@ -103,7 +103,7 @@ def _build_engine() -> None:
 _build_engine()
 
 
-async def get_db_session() -> AsyncGenerator[AsyncSession, None]:
+async def get_db_session() -> AsyncGenerator[AsyncSession]:
     """FastAPI Depends — 요청마다 세션을 열고 닫습니다 (③④ 단계에서 주입)."""
     if AsyncSessionLocal is None:
         if DATABASE_URL:
@@ -127,13 +127,13 @@ async def get_db_session() -> AsyncGenerator[AsyncSession, None]:
             raise
 
 
-async def get_db() -> AsyncGenerator[AsyncSession, None]:
+async def get_db() -> AsyncGenerator[AsyncSession]:
     """기존 코드 호환용 별칭 (`get_db_session` 과 동일)."""
     async for session in get_db_session():
         yield session
 
 
-async def get_db_optional() -> AsyncGenerator[AsyncSession | None, None]:
+async def get_db_optional() -> AsyncGenerator[AsyncSession | None]:
     """`DATABASE_URL` 이 없을 때는 `None` 을 넘겨 DB 없이도 라우트가 동작하도록 할 때 사용.
 
     `get_db_session` 을 async for 로 감싸지 않는다 — 중첩 제너레이터는 정리 시점에
@@ -164,8 +164,10 @@ async def create_all_tables() -> None:
         raise RuntimeError("DATABASE_URL 이 없거나 엔진 초기화에 실패했습니다.")
 
     from secom.app.models import user_model  # noqa: F401
-    from titanic.adapter.outbound.orm import booking_orm  # noqa: F401
-    from titanic.adapter.outbound.orm import person_orm  # noqa: F401
+    from titanic.adapter.outbound.orm import (
+        booking_orm,  # noqa: F401
+        person_orm,  # noqa: F401
+    )
 
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)

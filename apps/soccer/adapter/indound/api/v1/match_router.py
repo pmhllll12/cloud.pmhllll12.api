@@ -1,9 +1,8 @@
 from fastapi import APIRouter, Depends
-
 from soccer.adapter.indound.api.schemas.match_schemas import (
     MatchCreateSchema,
-    MatchScoreUpdateSchema,
     MatchSchema,
+    MatchScoreUpdateSchema,
 )
 from soccer.app.dtos.match_dto import MatchResponse
 from soccer.app.ports.input.match_use_case import MatchUseCase

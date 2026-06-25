@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends
-
 from soccer.adapter.indound.api.schemas.admin_schemas import AdminCreateSchema, AdminSchema
 from soccer.app.dtos.admin_dto import AdminResponse
 from soccer.app.ports.input.admin_use_case import AdminUseCase

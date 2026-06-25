@@ -6,8 +6,9 @@ import sys
 from logging.config import fileConfig
 from pathlib import Path
 
-from alembic import context
 from sqlalchemy import create_engine, pool
+
+from alembic import context
 
 # `titanic` 은 `backend/apps/` 아래, `database` 는 `backend/` 루트, `matrix` 는 `core/` 아래
 _ROOT = Path(__file__).resolve().parents[1]
@@ -23,12 +24,16 @@ from dotenv import load_dotenv
 load_dotenv(_APPS / ".env")
 load_dotenv(_ROOT / ".env")
 
-from database import Base  # noqa: E402
-from database import alembic_database_url  # noqa: E402
-
 # 메타데이터에 ORM 테이블 등록
-from titanic.adapter.outbound.orm import booking_orm  # noqa: E402, F401
-from titanic.adapter.outbound.orm import passenger_orm  # noqa: E402, F401
+from titanic.adapter.outbound.orm import (
+    booking_orm,  # noqa: E402, F401
+    passenger_orm,  # noqa: E402, F401
+)
+
+from database import (
+    Base,  # noqa: E402
+    alembic_database_url,  # noqa: E402
+)
 
 config = context.config
 

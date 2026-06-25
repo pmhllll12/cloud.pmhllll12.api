@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Depends
-
-from soccer.adapter.indound.api.schemas.point_log_schemas import PointLogCreateSchema, PointLogSchema
+from soccer.adapter.indound.api.schemas.point_log_schemas import (
+    PointLogCreateSchema,
+    PointLogSchema,
+)
 from soccer.app.dtos.point_log_dto import PointLogResponse
 from soccer.app.ports.input.point_log_use_case import PointLogUseCase
 from soccer.dependencies.point_log_provider import get_point_log_use_case

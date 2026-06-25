@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends
-
 from soccer.adapter.indound.api.schemas.person_schemas import PersonCreateSchema, PersonSchema
 from soccer.app.dtos.person_dto import PersonResponse
 from soccer.app.ports.input.person_use_case import PersonUseCase

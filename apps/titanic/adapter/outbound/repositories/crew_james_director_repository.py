@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 
 from sqlalchemy.ext.asyncio import AsyncSession
-
 from titanic.adapter.inbound.api.schemas.crew_james_director_schema import JamesDirectorSchema
 from titanic.app.dtos.crew_james_director_dto import (
     BookingCommand,
@@ -105,7 +104,7 @@ class JamesDirectorRepository(JamesDirectorPort):
                 cabin=cmd.cabin,
                 embarked=cmd.embarked,
             )
-            for person_orm, cmd in zip(person_orms, booking_commands)
+            for person_orm, cmd in zip(person_orms, booking_commands, strict=False)
         ]
         self.session.add_all(booking_orms)
         await self.session.commit()

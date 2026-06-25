@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 
 from sqlalchemy.ext.asyncio import AsyncSession
-
 from titanic.app.dtos.passenger_molly_scaler_dto import MollyScalerQuery, MollyScalerResponse
 from titanic.app.ports.output.passenger_molly_scaler_port import MollyScalerPort
 

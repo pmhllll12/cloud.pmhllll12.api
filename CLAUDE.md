@@ -22,17 +22,22 @@ FastAPI 백엔드 워크스페이스. 진입점은 [`main.py`](main.py) 이고, 
 
 ---
 
-## `apps/` 시블링 구조
+## `apps/` 시블링 구조 — 스타 토폴로지 (허브/스포크)
 
 ```
 minho/apps/
-├── titanic/          # 타이타닉 데모 (헥사고날)
+├── star_craft/       # 허브 — 스포크를 알고 조율. 스포크는 허브를 모름.
+├── titanic/          # 스포크 — 타이타닉 데모 (헥사고날)
 │   ├── .cursorrules
 │   └── _docs/CLAUDE.md
-└── <future-app>/     # 새 앱은 같은 층에 추가
+└── <future-app>/     # 새 스포크는 같은 층에 추가
 ```
 
-- 앱 간 **직접 import 금지**를 기본으로 하고, `main.py`에서 라우터만 `include_router` 한다.
+- **허브(`star_craft`) → 스포크**는 허용, **스포크 → 스포크**는 철저히 금지,
+  **스포크 → 허브**도 금지(허브만 스포크를 안다). 공유할 개념·타입은
+  `core/ontology/`로 끌어올린다 — 상세 ---> [`_docs/architecture-star-topology.md`](_docs/architecture-star-topology.md)
+- 이 경계는 `pyproject.toml`(`[tool.importlinter]`)로 빌드 타임에 강제된다.
+  각 앱 내부의 `domain → app → adapter` 클린 아키텍처 계층도 같은 설정으로 검사한다.
 - 앱별 규칙은 **`minho/apps/<앱>/.cursorrules`** 와 **`_docs/CLAUDE.md`** 에 둔다.
 
 타이타닉 상세 ---> [`apps/titanic/_docs/CLAUDE.md`](apps/titanic/_docs/CLAUDE.md)
@@ -80,6 +85,7 @@ docker compose up --build -d
 |------|------|
 | 엔티티·PK | [`_docs/entity-rules.md`](_docs/entity-rules.md) |
 | Alembic | [`alembic/README.md`](alembic/README.md) |
+| 스타 토폴로지(허브/스포크/온톨로지) | [`_docs/architecture-star-topology.md`](_docs/architecture-star-topology.md) |
 
 ---
 

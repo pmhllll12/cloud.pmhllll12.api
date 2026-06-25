@@ -1,7 +1,6 @@
 import logging
 
 from fastapi import APIRouter, Depends
-
 from titanic.adapter.inbound.api.schemas.crew_smith_captin_schemas import (
     SmithCaptainSchema,
     SmithChatRequest,

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import pytest
-
 from silicon_valley.domain.entities.piper_bighetti_hr_entity import BighettiHrEntity
 from silicon_valley.domain.entities.piper_dinesh_dash_entity import DineshDashEntity
 from silicon_valley.domain.entities.piper_dunn_coo_entity import DunnCooEntity

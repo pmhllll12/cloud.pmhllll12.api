@@ -1,11 +1,13 @@
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-
-from database import get_db
-from titanic.adapter.outbound.repositories.crew_hartley_violin_repository import HartleyViolinRepository
+from titanic.adapter.outbound.repositories.crew_hartley_violin_repository import (
+    HartleyViolinRepository,
+)
 from titanic.app.ports.input.crew_hartley_violin_use_case import HartleyViolinUseCase
 from titanic.app.ports.output.crew_hartley_violin_port import HartleyViolinPort
 from titanic.app.use_cases.crew_hartley_violin_interactor import HartleyViolinInteractor
+
+from database import get_db
 
 
 def get_hartley_violin_repository(

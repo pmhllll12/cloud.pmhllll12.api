@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from fastapi import APIRouter
-
 from silicon_valley.adapter.inbound.api.v1.piper_bighetti_hr_router import (
     bighetti_hr_router as piper_bighetti_hr_router,
 )

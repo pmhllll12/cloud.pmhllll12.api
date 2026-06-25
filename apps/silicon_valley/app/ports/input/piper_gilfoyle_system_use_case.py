@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Any
 
 from silicon_valley.adapter.inbound.schema.piper_gilfoyle_system_schema import GilfoyleSystemSchema
 from silicon_valley.app.dtos.piper_gilfoyle_system_dto import GilfoyleSystemResponse

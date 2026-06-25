@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Optional
 
 from titanic.domain.value_objects.cabin_vo import Cabin
 from titanic.domain.value_objects.embarked_vo import Embarked
@@ -25,11 +24,11 @@ class TravelClassProfile:
     @classmethod
     def from_raw(
         cls,
-        pclass_raw: Optional[str],
-        fare_raw: Optional[str],
-        cabin_raw: Optional[str],
-        embarked_raw: Optional[str],
-    ) -> "TravelClassProfile":
+        pclass_raw: str | None,
+        fare_raw: str | None,
+        cabin_raw: str | None,
+        embarked_raw: str | None,
+    ) -> TravelClassProfile:
         return cls(
             pclass=PClass.from_raw(pclass_raw),
             fare=Fare.from_raw(fare_raw),

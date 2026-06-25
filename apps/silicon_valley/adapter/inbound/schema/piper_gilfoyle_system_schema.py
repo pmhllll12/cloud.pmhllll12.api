@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field
 
+
 class GilfoyleSystemSchema(BaseModel):
 
     route: str = Field("gilfoyle", description="API route segment")

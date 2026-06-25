@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import pytest
-
 from silicon_valley.adapter.outbound.repositories.piper_bighetti_hr_repository import (
     BighettiHrRepository,
 )

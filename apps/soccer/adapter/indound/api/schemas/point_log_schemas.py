@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import Optional
 
 from pydantic import BaseModel, Field
 
@@ -7,7 +6,7 @@ from pydantic import BaseModel, Field
 class PointLogSchema(BaseModel):
     id: int = Field(0, description="Point log ID")
     user_id: int = Field(0, description="User ID (FK → USERS.id)")
-    admin_id: Optional[int] = Field(None, description="Admin ID (FK → ADMINS.id), None if system")
+    admin_id: int | None = Field(None, description="Admin ID (FK → ADMINS.id), None if system")
     amount: int = Field(0, description="Point change amount (positive: earn, negative: spend)")
     reason: str = Field("", description="Reason for point change")
     created_at: datetime = Field(..., description="Log creation time")

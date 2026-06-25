@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Any
 
 from silicon_valley.adapter.inbound.schema.piper_hendricks_ceo_schema import HendricksCeoSchema
 from silicon_valley.app.dtos.piper_hendricks_ceo_dto import HendricksCeoResponse

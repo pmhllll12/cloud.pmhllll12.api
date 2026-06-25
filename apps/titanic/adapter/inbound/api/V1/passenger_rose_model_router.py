@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends
-
 from titanic.adapter.inbound.api.schemas.passenger_rose_model_schemas import RoseModelSchema
 from titanic.app.dtos.passenger_rose_model_dto import RoseModelResponse
 from titanic.app.ports.input.passenger_rose_model_use_case import RoseModelUseCase

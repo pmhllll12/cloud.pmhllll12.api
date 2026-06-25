@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends
-
 from soccer.adapter.indound.api.schemas.prediction_schemas import (
     PredictionCreateSchema,
     PredictionSchema,

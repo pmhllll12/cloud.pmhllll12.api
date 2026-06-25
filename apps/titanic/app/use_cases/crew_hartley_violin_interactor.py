@@ -4,11 +4,11 @@ import io
 from pathlib import Path
 
 import matplotlib
+
 matplotlib.use("Agg")  # FastAPI 스레드풀(메인 스레드 아님)에서 그려서 GUI 백엔드 사용 시 불안정/크래시 위험
 import matplotlib.pyplot as plt
 import seaborn as sns
 from pandas import DataFrame, factorize
-
 from titanic.adapter.inbound.api.schemas.crew_hartley_violin_schemas import HartleyViolinSchema
 from titanic.app.dtos.crew_hartley_violin_dto import HartleyViolinQuery, HartleyViolinResponse
 from titanic.app.ports.input.crew_hartley_violin_use_case import HartleyViolinUseCase

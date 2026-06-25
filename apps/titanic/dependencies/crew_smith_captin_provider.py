@@ -1,8 +1,8 @@
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-
-from database import get_db
-from titanic.adapter.outbound.repositories.crew_smith_captin_repository import SmithCaptainRepository
+from titanic.adapter.outbound.repositories.crew_smith_captin_repository import (
+    SmithCaptainRepository,
+)
 from titanic.app.ports.input.crew_andrews_architect_use_case import AndrewsArchitectUseCase
 from titanic.app.ports.input.crew_hartley_violin_use_case import HartleyViolinUseCase
 from titanic.app.ports.input.crew_lowe_boat_use_case import LoweBoatUseCase
@@ -20,6 +20,8 @@ from titanic.dependencies.crew_walter_roaster_provider import get_walter_roaster
 from titanic.dependencies.passenger_cal_tester_provider import get_cal_test_use_case
 from titanic.dependencies.passenger_jack_trainer_provider import get_jack_train_use_case
 from titanic.dependencies.passenger_rose_model_provider import get_rose_model_use_case
+
+from database import get_db
 
 
 def get_smith_captain_repository(

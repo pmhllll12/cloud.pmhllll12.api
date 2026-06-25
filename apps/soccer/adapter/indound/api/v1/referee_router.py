@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends
-
 from soccer.adapter.indound.api.schemas.referee_schemas import RefereeCreateSchema, RefereeSchema
 from soccer.app.dtos.referee_dto import RefereeResponse
 from soccer.app.ports.input.referee_use_case import RefereeUseCase

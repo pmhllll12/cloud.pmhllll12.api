@@ -5,7 +5,7 @@ from __future__ import annotations
 import os
 import re
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 from dotenv import load_dotenv
 
@@ -89,11 +89,11 @@ def format_gemini_error(exc: Exception) -> tuple[int, str]:
 class Keymaker:
     """시스템 전역에서 사용하는 API 키·Gemini 등 외부 연동을 담당합니다."""
 
-    def __init__(self, apps_root: Optional[Path] = None) -> None:
+    def __init__(self, apps_root: Path | None = None) -> None:
         self._apps_root = apps_root if apps_root is not None else _APPS_ROOT
         self._env_loaded = False
         self._gemini_model: Any = None
-        self._last_model_used: Optional[str] = None
+        self._last_model_used: str | None = None
 
     def load_env(self) -> None:
         if self._env_loaded:
@@ -103,7 +103,7 @@ class Keymaker:
         self._env_loaded = True
 
     @property
-    def gemini_api_key(self) -> Optional[str]:
+    def gemini_api_key(self) -> str | None:
         self.load_env()
         raw = (os.getenv("GEMINI_API_KEY") or "").strip()
         if not raw or raw in _INVALID_GEMINI_KEYS:
@@ -145,7 +145,7 @@ class Keymaker:
             )
         _get_genai().configure(api_key=key)
 
-    def get_gemini_model(self, model_name: Optional[str] = None) -> Any:
+    def get_gemini_model(self, model_name: str | None = None) -> Any:
         """지정 모델(또는 설정값)의 GenerativeModel 인스턴스."""
         self._ensure_configured()
         name = self._normalize_model_name(model_name or self.gemini_model_name)
@@ -154,7 +154,7 @@ class Keymaker:
     def generate_content(self, prompt: str) -> tuple[Any, str]:
         """할당량/404 시 다른 Flash 모델로 순서대로 재시도합니다."""
         self._ensure_configured()
-        last_exc: Optional[Exception] = None
+        last_exc: Exception | None = None
 
         for model_name in self._model_candidates():
             try:

@@ -1,5 +1,4 @@
 from datetime import date
-from typing import Optional
 
 from pydantic import BaseModel, Field
 
@@ -7,8 +6,8 @@ from pydantic import BaseModel, Field
 class PersonSchema(BaseModel):
     id: int = Field(0, description="Person ID")
     name: str = Field("", description="Person's name")
-    birth_date: Optional[date] = Field(None, description="Date of birth")
-    nationality: Optional[str] = Field(None, description="Nationality")
+    birth_date: date | None = Field(None, description="Date of birth")
+    nationality: str | None = Field(None, description="Nationality")
     person_type: str = Field("", description="Type: player | coach | referee")
 
     model_config = {
@@ -26,8 +25,8 @@ class PersonSchema(BaseModel):
 
 class PersonCreateSchema(BaseModel):
     name: str = Field(..., min_length=1, max_length=100)
-    birth_date: Optional[date] = None
-    nationality: Optional[str] = Field(None, max_length=50)
+    birth_date: date | None = None
+    nationality: str | None = Field(None, max_length=50)
     person_type: str = Field(..., description="player | coach | referee")
 
 

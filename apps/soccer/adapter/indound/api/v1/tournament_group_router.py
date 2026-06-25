@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends
-
 from soccer.adapter.indound.api.schemas.tournament_group_schemas import (
     TournamentGroupCreateSchema,
     TournamentGroupSchema,

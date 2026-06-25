@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 
 from sqlalchemy.ext.asyncio import AsyncSession
-
 from titanic.app.dtos.passenger_rose_model_dto import RoseModelQuery, RoseModelResponse
 from titanic.app.ports.output.passenger_rose_model_port import RoseModelPort
 

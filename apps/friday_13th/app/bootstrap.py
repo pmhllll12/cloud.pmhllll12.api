@@ -4,15 +4,9 @@ from __future__ import annotations
 
 import logging
 
-from sqlalchemy import text
-
-from database import AsyncSessionLocal, Base, engine
 from secom.app.controllers.user_controller import UserController
 from secom.app.models.user_model import User  # noqa: F401 — Base 메타데이터 등록
-from titanic.adapter.outbound.orm import booking_orm  # noqa: F401
-from titanic.adapter.outbound.orm import person_orm  # noqa: F401
 from secom.app.repositories.user_repository import UserRepository
-from secom.schemas.user_schemas import UserSchemas
 from secom.app.services.user_service import (
     SEED_ADMIN_EMAIL,
     SEED_PASSWORD,
@@ -20,6 +14,14 @@ from secom.app.services.user_service import (
     SEED_USER_EMAIL,
     UserService,
 )
+from secom.schemas.user_schemas import UserSchemas
+from sqlalchemy import text
+from titanic.adapter.outbound.orm import (
+    booking_orm,  # noqa: F401
+    person_orm,  # noqa: F401
+)
+
+from database import AsyncSessionLocal, Base, engine
 
 logger = logging.getLogger(__name__)
 

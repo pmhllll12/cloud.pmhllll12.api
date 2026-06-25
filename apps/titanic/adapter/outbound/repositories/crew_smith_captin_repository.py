@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 
 from sqlalchemy.ext.asyncio import AsyncSession
-
 from titanic.app.dtos.crew_smith_captin_dto import SmithCaptainQuery, SmithCaptainResponse
 from titanic.app.ports.output.crew_smith_captin_port import SmithCaptainPort
 

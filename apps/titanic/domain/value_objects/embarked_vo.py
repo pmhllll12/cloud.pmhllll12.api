@@ -1,7 +1,7 @@
 from __future__ import annotations
+
 from dataclasses import dataclass
 from enum import Enum
-from typing import Optional
 
 
 class EmbarkedType(str, Enum):
@@ -15,7 +15,7 @@ class Embarked:
     value: EmbarkedType
 
     @classmethod
-    def from_raw(cls, raw: Optional[str]) -> "Embarked":
+    def from_raw(cls, raw: str | None) -> Embarked:
         if raw is None or raw.strip() == "":
             raise ValueError("Embarked는 필수 값입니다.")
         try:

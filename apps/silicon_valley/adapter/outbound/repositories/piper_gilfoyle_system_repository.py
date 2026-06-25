@@ -2,10 +2,12 @@ from __future__ import annotations
 
 import logging
 
-from sqlalchemy.ext.asyncio import AsyncSession
-
-from silicon_valley.app.dtos.piper_gilfoyle_system_dto import GilfoyleSystemQuery, GilfoyleSystemResponse
+from silicon_valley.app.dtos.piper_gilfoyle_system_dto import (
+    GilfoyleSystemQuery,
+    GilfoyleSystemResponse,
+)
 from silicon_valley.app.ports.output.piper_gilfoyle_system_port import GilfoyleSystemPort
+from sqlalchemy.ext.asyncio import AsyncSession
 
 logger = logging.getLogger(__name__)
 

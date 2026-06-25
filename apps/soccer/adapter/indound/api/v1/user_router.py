@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends
-
 from soccer.adapter.indound.api.schemas.user_schemas import UserCreateSchema, UserSchema
 from soccer.app.dtos.user_dto import UserResponse
 from soccer.app.ports.input.user_use_case import UserUseCase

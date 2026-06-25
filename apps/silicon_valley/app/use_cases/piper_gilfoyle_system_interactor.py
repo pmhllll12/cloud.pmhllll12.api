@@ -1,7 +1,10 @@
 from __future__ import annotations
 
 from silicon_valley.adapter.inbound.schema.piper_gilfoyle_system_schema import GilfoyleSystemSchema
-from silicon_valley.app.dtos.piper_gilfoyle_system_dto import GilfoyleSystemQuery, GilfoyleSystemResponse
+from silicon_valley.app.dtos.piper_gilfoyle_system_dto import (
+    GilfoyleSystemQuery,
+    GilfoyleSystemResponse,
+)
 from silicon_valley.app.ports.input.piper_gilfoyle_system_use_case import GilfoyleSystemUseCase
 from silicon_valley.app.ports.output.piper_gilfoyle_system_port import GilfoyleSystemPort
 

@@ -5,12 +5,12 @@ from collections.abc import AsyncGenerator
 import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
-
-from database import get_db
 from silicon_valley.adapter.inbound.api import silicon_valley_router
 
+from database import get_db
 
-async def _override_get_db() -> AsyncGenerator[None, None]:
+
+async def _override_get_db() -> AsyncGenerator[None]:
     yield None
 
 

@@ -8,18 +8,20 @@ from catboost import CatBoostClassifier
 from lightgbm import LGBMClassifier
 from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import RandomForestClassifier
-from xgboost import XGBClassifier
-
 from titanic.adapter.inbound.api.schemas.passenger_rose_model_schemas import RoseModelSchema
 from titanic.app.dtos.passenger_rose_model_dto import RoseModelQuery, RoseModelResponse
-from titanic.app.ports.input.passenger_rose_model_use_case import RoseModelStrategy, RoseModelUseCase
+from titanic.app.ports.input.passenger_rose_model_use_case import (
+    RoseModelStrategy,
+    RoseModelUseCase,
+)
 from titanic.app.ports.output.passenger_rose_model_port import RoseModelPort
+from xgboost import XGBClassifier
 
 
 class LogisticRegressionStrategy(RoseModelStrategy):

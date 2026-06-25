@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends
-
 from silicon_valley.adapter.inbound.schema.piper_dunn_coo_schema import DunnCooSchema
 from silicon_valley.app.dtos.piper_dunn_coo_dto import DunnCooResponse
 from silicon_valley.app.ports.input.piper_dunn_coo_use_case import DunnCooUseCase

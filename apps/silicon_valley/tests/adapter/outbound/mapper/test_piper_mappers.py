@@ -1,9 +1,8 @@
 from __future__ import annotations
 
-from typing import Callable
+from collections.abc import Callable
 
 import pytest
-
 from silicon_valley.adapter.outbound.mapper.piper_bighetti_hr_mapper import (
     bighetti_hr_default_entity,
 )

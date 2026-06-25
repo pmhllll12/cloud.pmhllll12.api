@@ -5,10 +5,14 @@ import re
 from typing import Any
 
 from kiwipiepy import Kiwi
-
+from titanic.adapter.inbound.api.schemas.crew_andrews_architect_schemas import (
+    AndrewsArchitectSchema,
+)
 from titanic.app.constants.intent_map import INTENT_MAP
-from titanic.adapter.inbound.api.schemas.crew_andrews_architect_schemas import AndrewsArchitectSchema
-from titanic.app.dtos.crew_andrews_architect_dto import AndrewsArchitectQuery, AndrewsArchitectResponse
+from titanic.app.dtos.crew_andrews_architect_dto import (
+    AndrewsArchitectQuery,
+    AndrewsArchitectResponse,
+)
 from titanic.app.ports.input.crew_andrews_architect_use_case import AndrewsArchitectUseCase
 from titanic.app.ports.output.crew_andrews_architect_port import AndrewsArchitectPort
 

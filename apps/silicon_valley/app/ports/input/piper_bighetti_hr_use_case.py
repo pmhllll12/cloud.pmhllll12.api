@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Any
 
 from silicon_valley.adapter.inbound.schema.piper_bighetti_hr_schema import BighettiHrSchema
 from silicon_valley.app.dtos.piper_bighetti_hr_dto import BighettiHrResponse

@@ -2,7 +2,9 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 
-from titanic.adapter.inbound.api.schemas.passenger_ruth_validation_schemas import RuthValidationSchema
+from titanic.adapter.inbound.api.schemas.passenger_ruth_validation_schemas import (
+    RuthValidationSchema,
+)
 from titanic.app.dtos.passenger_ruth_validation_dto import RuthValidationResponse
 
 

@@ -7,8 +7,6 @@ from titanic.adapter.inbound.api.schemas.crew_smith_captin_schemas import (
     SmithChatRequest,
     SmithChatResponse,
 )
-from titanic.adapter.inbound.api.schemas.passenger_jack_trainer_schemas import JackTrainerSchema
-from titanic.adapter.inbound.api.schemas.passenger_rose_model_schemas import RoseModelSchema
 from titanic.app.dtos.crew_smith_captin_dto import SmithCaptainResponse
 from titanic.app.dtos.passenger_jack_trainer_dto import JackTrainerResponse
 from titanic.app.dtos.passenger_rose_model_dto import RoseModelResponse

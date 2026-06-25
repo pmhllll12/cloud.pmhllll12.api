@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import pandas as pd
-
 from titanic.adapter.inbound.api.schemas.crew_lowe_boat_schema import LoweBoatSchema
 from titanic.app.dtos.crew_lowe_boat_dto import LoweBoatQuery, LoweBoatResponse
 from titanic.app.ports.input.crew_lowe_boat_use_case import LoweBoatUseCase
