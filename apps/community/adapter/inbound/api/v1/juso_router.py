@@ -9,6 +9,7 @@ from community.adapter.inbound.api.schemas.juso_schemas import (
     JusoContactSchema,
     JusoResponse,
     JusoSchema,
+    JusoSearchResponse,
     JusoUploadResponse,
 )
 from community.app.ports.input.juso_use_case import JusoUseCase
@@ -91,3 +92,11 @@ async def upload_contacts(
     return await use_case.upload_contacts(
         _parse_csv((await file.read()).decode("utf-8", errors="replace"))
     )
+
+
+@juso_router.get("/search", response_model=JusoSearchResponse, summary="이메일/닉네임 앞글자 검색")
+async def search_contacts(
+    q: str = "",
+    use_case: JusoUseCase = Depends(get_juso_use_case),
+) -> JusoSearchResponse:
+    return await use_case.search_contacts(q)

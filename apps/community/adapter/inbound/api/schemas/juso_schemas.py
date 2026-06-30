@@ -57,3 +57,12 @@ class JusoUploadResponse(BaseModel):
     ok: bool
     count: int
     message: str
+
+
+class JusoContactSuggestion(BaseModel):
+    nickname: str
+    email: str
+
+
+class JusoSearchResponse(BaseModel):
+    results: list[JusoContactSuggestion]

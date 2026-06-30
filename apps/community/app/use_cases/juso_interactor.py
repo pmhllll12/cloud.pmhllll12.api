@@ -2,8 +2,10 @@ from __future__ import annotations
 
 from community.adapter.inbound.api.schemas.juso_schemas import (
     JusoContactSchema,
+    JusoContactSuggestion,
     JusoResponse,
     JusoSchema,
+    JusoSearchResponse,
     JusoUploadResponse,
 )
 from community.app.dtos.juso_dto import JusoContactRecord, JusoQuery
@@ -48,3 +50,9 @@ class JusoInteractor(JusoUseCase):
         ]
         count = await self.repository.save_contacts(records)
         return JusoUploadResponse(ok=True, count=count, message=f"{count}개의 연락처가 저장됐습니다.")
+
+    async def search_contacts(self, q: str) -> JusoSearchResponse:
+        suggestions = await self.repository.search_contacts(q.strip(), limit=5)
+        return JusoSearchResponse(
+            results=[JusoContactSuggestion(nickname=s.nickname, email=s.email) for s in suggestions]
+        )

@@ -6,6 +6,7 @@ from community.adapter.inbound.api.schemas.juso_schemas import (
     JusoContactSchema,
     JusoResponse,
     JusoSchema,
+    JusoSearchResponse,
     JusoUploadResponse,
 )
 
@@ -17,4 +18,8 @@ class JusoUseCase(ABC):
 
     @abstractmethod
     async def upload_contacts(self, contacts: list[JusoContactSchema]) -> JusoUploadResponse:
+        raise NotImplementedError
+
+    @abstractmethod
+    async def search_contacts(self, q: str) -> JusoSearchResponse:
         raise NotImplementedError

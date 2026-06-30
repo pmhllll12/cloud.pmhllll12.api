@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 
 @dataclass(frozen=True)
@@ -40,3 +40,9 @@ class JusoUploadResult:
     ok: bool
     count: int
     message: str
+
+
+@dataclass(frozen=True)
+class JusoContactSuggestionResult:
+    nickname: str
+    email: str

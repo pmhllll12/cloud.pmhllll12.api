@@ -14,3 +14,13 @@ class TelegramResponse(BaseModel):
     role: str
     channels: list[str]
     greeting: str
+
+
+class TelegramSendRequest(BaseModel):
+    chat_id: str = ""
+    message: str = ""
+
+
+class TelegramSendResponse(BaseModel):
+    ok: bool
+    message: str

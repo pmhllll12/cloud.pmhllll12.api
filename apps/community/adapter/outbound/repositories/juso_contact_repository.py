@@ -4,8 +4,7 @@ import logging
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from community.adapter.outbound.mappers.juso_contact_mapper import JusoContactMapper
-from community.app.dtos.juso_dto import JusoContactRecord
+from community.app.dtos.juso_dto import JusoContactRecord, JusoContactSuggestionResult
 from community.app.ports.output.juso_contact_port import JusoContactPort
 
 logger = logging.getLogger(__name__)
@@ -46,3 +45,31 @@ class JusoContactRepository(JusoContactPort):
 
         logger.info("[JusoContactRepository] save_contacts saved=%d", len(rows))
         return len(rows)
+
+    async def search_contacts(self, q: str, limit: int = 5) -> list[JusoContactSuggestionResult]:
+        from community.adapter.outbound.orm.juso_contact_orm import JusoContactOrm
+        from sqlalchemy import or_, select
+
+        if not q:
+            return []
+
+        pattern = f"{q}%"
+        stmt = (
+            select(JusoContactOrm.nickname, JusoContactOrm.email_1_value)
+            .where(
+                or_(
+                    JusoContactOrm.email_1_value.ilike(pattern),
+                    JusoContactOrm.nickname.ilike(pattern),
+                    JusoContactOrm.first_name.ilike(pattern),
+                    JusoContactOrm.last_name.ilike(pattern),
+                )
+            )
+            .where(JusoContactOrm.email_1_value != "")
+            .limit(limit)
+        )
+        rows = (await self.session.execute(stmt)).all()
+        logger.info("[JusoContactRepository] search_contacts q=%s found=%d", q, len(rows))
+        return [
+            JusoContactSuggestionResult(nickname=row.nickname or row.email_1_value, email=row.email_1_value)
+            for row in rows
+        ]

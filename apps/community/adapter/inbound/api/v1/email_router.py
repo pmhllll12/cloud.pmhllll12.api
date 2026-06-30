@@ -24,7 +24,15 @@ async def send_email(
     """주제를 받아 스팸 판정 후 EXAONE가 이메일을 작성하고 n8n을 통해 Gmail로 발송합니다."""
     evidence = Evidence(
         source_app="community",
-        signals={"to_email": body.to_email, "topic": body.topic},
+        signals={
+            "to_email": body.to_email,
+            "topic": body.topic,
+            "context": (
+                "사용자가 관리자 대시보드에서 직접 입력한 이메일 발송 요청입니다. "
+                "스팸 기준: 광고·홍보 문구 포함, 악성 URL 포함, 대량 발송 의심 문구. "
+                "일반 업무·인사 메시지(예: 안녕, 회의 안내, 일정 공유)는 정상(HAM)으로 판정하세요."
+            ),
+        },
     )
     verdict = await judge.evaluate(evidence)
     if verdict.is_spam:
