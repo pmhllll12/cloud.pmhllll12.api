@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 
 @dataclass(frozen=True)
@@ -16,3 +16,27 @@ class JusoResult:
     role: str
     responsibilities: tuple[str, ...]
     greeting: str
+
+
+@dataclass(frozen=True)
+class JusoContactRecord:
+    first_name: str = ""
+    middle_name: str = ""
+    last_name: str = ""
+    nickname: str = ""
+    organization_name: str = ""
+    organization_title: str = ""
+    email_1_value: str = ""
+    phone_1_value: str = ""
+    phone_2_value: str = ""
+    address_1_city: str = ""
+    address_1_country: str = ""
+    birthday: str = ""
+    labels: str = ""
+
+
+@dataclass(frozen=True)
+class JusoUploadResult:
+    ok: bool
+    count: int
+    message: str
