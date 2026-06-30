@@ -1,13 +1,6 @@
 from __future__ import annotations
 
-import asyncio
-import logging
-import os
-
-import httpx
 from fastapi import APIRouter, Depends, HTTPException
-
-logger = logging.getLogger(__name__)
 
 from community.adapter.inbound.api.schemas import EmailSendRequest, EmailSendResponse
 from community.adapter.inbound.api.schemas.email_host_schemas import EmailHostResponse, EmailHostSchema
@@ -52,27 +45,7 @@ async def send_email(
     if not result.ok:
         raise HTTPException(status_code=502, detail="n8n 이메일 발송 실패. n8n 워크플로우 상태를 확인하세요.")
 
-    # 텔레그램 알림 (비동기 fire-and-forget)
-    asyncio.create_task(_notify_telegram(body.to_email, body.topic))
-
     return EmailSendResponse(ok=True, message=result.message)
-
-
-async def _notify_telegram(to_email: str, topic: str) -> None:
-    token = os.getenv("TELEGRAM_BOT_TOKEN", "")
-    chat_id = os.getenv("DEVELOPER_CHAT_ID", "")
-    if not token or not chat_id:
-        return
-    text = f"✅ 이메일 발송 완료\n📧 수신자: {to_email}\n📝 주제: {topic}"
-    try:
-        async with httpx.AsyncClient(timeout=10.0) as client:
-            await client.post(
-                f"https://api.telegram.org/bot{token}/sendMessage",
-                json={"chat_id": chat_id, "text": text},
-            )
-        logger.info("[email/send] telegram notify to=%s ok", chat_id)
-    except Exception as exc:
-        logger.warning("[email/send] telegram notify failed: %s", exc)
 
 
 @email_router.get("/email/myself", response_model=EmailHostResponse)
