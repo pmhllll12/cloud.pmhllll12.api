@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException
 
 from community.adapter.inbound.api.schemas import EmailSendRequest, EmailSendResponse
 from community.adapter.inbound.api.schemas.email_host_schemas import EmailHostResponse, EmailHostSchema
+from community.adapter.inbound.api.schemas.email_incoming_schemas import EmailIncomingRequest, EmailIncomingResponse
 from community.app.dtos.send_email_dto import SendEmailCommand
 from community.app.ports.input.email_host_use_case import EmailHostUseCase
 from community.app.ports.input.send_email_use_case import SendEmailUseCase
@@ -46,6 +47,13 @@ async def send_email(
         raise HTTPException(status_code=502, detail="n8n 이메일 발송 실패. n8n 워크플로우 상태를 확인하세요.")
 
     return EmailSendResponse(ok=True, message=result.message)
+
+
+@email_router.post("/email/incoming", response_model=EmailIncomingResponse)
+async def receive_incoming_email(body: EmailIncomingRequest) -> EmailIncomingResponse:
+    """n8n Gmail Trigger가 새로 도착한 메일 정보를 전달하는 수신 엔드포인트."""
+    print(f"[email/incoming] 제목={body.subject!r} 발신자={body.from_!r} 수신자={body.to!r}")
+    return EmailIncomingResponse(ok=True, message="received")
 
 
 @email_router.get("/email/myself", response_model=EmailHostResponse)
