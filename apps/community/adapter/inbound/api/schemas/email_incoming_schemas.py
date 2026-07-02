@@ -15,3 +15,13 @@ class EmailIncomingRequest(BaseModel):
 class EmailIncomingResponse(BaseModel):
     ok: bool
     message: str = "received"
+
+
+class EmailIncomingLogEntry(BaseModel):
+    received_at: str
+    subject: str
+    from_: str | None = Field(default=None, alias="from")
+    to: str | None = None
+    body: str | None = None
+
+    model_config = {"populate_by_name": True}

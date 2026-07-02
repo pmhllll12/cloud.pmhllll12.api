@@ -29,6 +29,7 @@ from titanic.adapter.outbound.orm import (
     booking_orm,  # noqa: E402, F401
     passenger_orm,  # noqa: E402, F401
 )
+from community.adapter.outbound.orm import received_email_orm  # noqa: E402, F401
 
 from database import (
     Base,  # noqa: E402

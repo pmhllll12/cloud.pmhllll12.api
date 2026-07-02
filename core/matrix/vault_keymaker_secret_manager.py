@@ -35,6 +35,11 @@ _INVALID_GEMINI_KEYS = frozenset(
 # 무료 티어에서 gemini-2.0-flash 는 limit:0 인 경우가 많음 → 2.5-flash 우선
 _DEFAULT_GEMINI_MODEL = "gemini-2.5-flash"
 
+# text-embedding-004 는 폐기됨 → gemini-embedding-001 사용.
+# 기본 출력은 3072차원이라 output_dimensionality로 pgvector 컬럼 차원(768)에 맞춰 자름.
+_EMBEDDING_MODEL = "models/gemini-embedding-001"
+EMBEDDING_DIM = 768
+
 _FALLBACK_MODELS = (
     "gemini-2.5-flash",
     "gemini-2.0-flash-lite",
@@ -172,6 +177,14 @@ class Keymaker:
         if last_exc is not None:
             raise last_exc
         raise RuntimeError("Gemini 모델 호출에 실패했습니다.")
+
+    def embed_content(self, text: str) -> list[float]:
+        """텍스트를 `EMBEDDING_DIM` 차원 벡터로 변환합니다 (pgvector 저장용)."""
+        self._ensure_configured()
+        result = _get_genai().embed_content(
+            model=_EMBEDDING_MODEL, content=text, output_dimensionality=EMBEDDING_DIM
+        )
+        return list(result["embedding"])
 
     def reset_gemini_cache(self) -> None:
         self._gemini_model = None
