@@ -5,6 +5,7 @@ import os
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from community.adapter.outbound.llama_content_filter_client import LlamaContentFilterClient
 from community.adapter.outbound.n8n_email_client import N8nEmailClient
 from community.adapter.outbound.repositories.juso_contact_repository import JusoContactRepository
 from community.app.ports.input.community_host_use_case import CommunityHostUseCase
@@ -13,6 +14,7 @@ from community.app.ports.input.email_host_use_case import EmailHostUseCase
 from community.app.ports.input.juso_use_case import JusoUseCase
 from community.app.ports.input.send_email_use_case import SendEmailUseCase
 from community.app.ports.input.telegram_use_case import TelegramUseCase
+from community.app.ports.output.content_filter_port import ContentFilterPort
 from community.app.ports.output.juso_contact_port import JusoContactPort
 from community.app.use_cases.community_host_interactor import CommunityHostInteractor
 from community.app.use_cases.discord_interactor import DiscordInteractor
@@ -23,6 +25,10 @@ from community.app.use_cases.telegram_interactor import TelegramInteractor
 from database import get_db
 
 _DEFAULT_WEBHOOK = "http://localhost:5678/webhook/community-email"
+
+
+def get_content_filter_port() -> ContentFilterPort:
+    return LlamaContentFilterClient()
 
 
 def get_send_email_use_case() -> SendEmailUseCase:

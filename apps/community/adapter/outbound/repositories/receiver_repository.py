@@ -18,6 +18,13 @@ class ReceiverRepository(ReceiverPort):
     def __init__(self, session: AsyncSession) -> None:
         self.session = session
 
+    async def exists_by_message_id(self, message_id: str) -> bool:
+        from community.adapter.outbound.orm.received_email_orm import ReceivedEmailOrm
+
+        stmt = select(ReceivedEmailOrm.id).where(ReceivedEmailOrm.message_id == message_id).limit(1)
+        row = (await self.session.execute(stmt)).first()
+        return row is not None
+
     async def save(
         self,
         subject: str,
@@ -26,6 +33,7 @@ class ReceiverRepository(ReceiverPort):
         body: str | None,
         received_at: datetime,
         embedding: list[float],
+        message_id: str | None = None,
     ) -> None:
         from community.adapter.outbound.orm.received_email_orm import ReceivedEmailOrm
 
@@ -36,6 +44,7 @@ class ReceiverRepository(ReceiverPort):
             body=body or "",
             received_at=received_at,
             embedding=embedding,
+            message_id=message_id,
         )
         self.session.add(row)
         await self.session.commit()
@@ -57,6 +66,7 @@ class ReceiverRepository(ReceiverPort):
                 from_=row.from_email or None,
                 to=row.to_email or None,
                 body=row.body or None,
+                message_id=row.message_id,
             )
             for row in rows
         ]

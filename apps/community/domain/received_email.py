@@ -11,6 +11,7 @@ class ReceivedEmail:
     to: str | None
     body: str | None
     received_at: datetime
+    message_id: str | None = None
 
     def __post_init__(self) -> None:
         if not self.subject.strip():

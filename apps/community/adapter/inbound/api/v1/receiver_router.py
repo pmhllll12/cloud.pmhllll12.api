@@ -23,7 +23,13 @@ async def receive_incoming_email(
     """n8n Gmail Trigger가 새로 도착한 메일을 수신해 임베딩과 함께 pgvector에 저장합니다."""
     try:
         result = await use_case.receive(
-            ReceiveEmailCommand(subject=body.subject, from_=body.from_, to=body.to, body=body.body)
+            ReceiveEmailCommand(
+                subject=body.subject,
+                from_=body.from_,
+                to=body.to,
+                body=body.body,
+                message_id=body.message_id,
+            )
         )
     except MissingApiKeyError as exc:
         raise HTTPException(status_code=503, detail=str(exc)) from exc
@@ -43,6 +49,7 @@ async def get_received_logs(
             from_=log.from_,
             to=log.to,
             body=log.body,
+            message_id=log.message_id,
         )
         for log in logs
     ]

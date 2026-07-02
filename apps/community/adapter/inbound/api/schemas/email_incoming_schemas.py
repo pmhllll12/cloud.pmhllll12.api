@@ -8,6 +8,7 @@ class EmailIncomingRequest(BaseModel):
     from_: str | None = Field(default=None, alias="from")
     to: str | None = None
     body: str | None = None
+    message_id: str | None = Field(default=None, alias="messageId")
 
     model_config = {"populate_by_name": True}
 
@@ -23,5 +24,6 @@ class EmailIncomingLogEntry(BaseModel):
     from_: str | None = Field(default=None, alias="from")
     to: str | None = None
     body: str | None = None
+    message_id: str | None = Field(default=None, alias="messageId")
 
     model_config = {"populate_by_name": True}

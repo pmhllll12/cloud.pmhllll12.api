@@ -9,6 +9,7 @@ class ReceiveEmailCommand:
     from_: str | None
     to: str | None
     body: str | None
+    message_id: str | None = None
 
 
 @dataclass(frozen=True)
@@ -24,3 +25,4 @@ class ReceivedEmailLog:
     from_: str | None
     to: str | None
     body: str | None
+    message_id: str | None = None
