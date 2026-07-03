@@ -45,10 +45,10 @@ from typing import Any
 
 from adapters.db_health_adapter import DbHealthAdapter
 from adapters.weather_adapter import fetch_seoul_weather
+from community.adapter.inbound.api import community_router
 from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, ConfigDict, Field
-from community.adapter.inbound.api import community_router
 from silicon_valley.adapter.inbound.api import silicon_valley_router
 from silicon_valley.adapter.inbound.mcp.piper_bighetti_hr_tools import mcp as bighetti_mcp
 from silicon_valley.adapter.inbound.mcp.piper_dinesh_dash_tools import mcp as dinesh_mcp
@@ -59,6 +59,7 @@ from silicon_valley.dependencies.providers import get_n8n_client
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 from titanic.adapter.inbound.api import titanic_router
+from vision.adapter.inbound.api import vision_router
 
 from core.matrix.vault_keymaker_secret_manager import (
     MissingApiKeyError,
@@ -215,6 +216,7 @@ register_secom_routes(app)
 app.include_router(titanic_router)
 app.include_router(silicon_valley_router)
 app.include_router(community_router)
+app.include_router(vision_router)
 
 for _mcp_prefix, _mcp_server, _mcp_http_app in _SILICON_VALLEY_MCP_SERVERS:
     app.mount(_mcp_prefix, _mcp_http_app)

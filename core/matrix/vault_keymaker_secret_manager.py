@@ -156,7 +156,7 @@ class Keymaker:
         name = self._normalize_model_name(model_name or self.gemini_model_name)
         return _get_genai().GenerativeModel(name)
 
-    def generate_content(self, prompt: str) -> tuple[Any, str]:
+    def _generate_with_retry(self, build_contents: Any) -> tuple[Any, str]:
         """할당량/404 시 다른 Flash 모델로 순서대로 재시도합니다."""
         self._ensure_configured()
         last_exc: Exception | None = None
@@ -164,7 +164,7 @@ class Keymaker:
         for model_name in self._model_candidates():
             try:
                 model = _get_genai().GenerativeModel(model_name)
-                response = model.generate_content(prompt)
+                response = model.generate_content(build_contents())
                 self._gemini_model = model
                 self._last_model_used = model_name
                 return response, model_name
@@ -177,6 +177,17 @@ class Keymaker:
         if last_exc is not None:
             raise last_exc
         raise RuntimeError("Gemini 모델 호출에 실패했습니다.")
+
+    def generate_content(self, prompt: str) -> tuple[Any, str]:
+        return self._generate_with_retry(lambda: prompt)
+
+    def generate_vision_content(
+        self, prompt: str, image_bytes: bytes, mime_type: str
+    ) -> tuple[Any, str]:
+        """이미지 + 프롬프트로 멀티모달 응답을 생성합니다."""
+        return self._generate_with_retry(
+            lambda: [{"mime_type": mime_type, "data": image_bytes}, prompt]
+        )
 
     def embed_content(self, text: str) -> list[float]:
         """텍스트를 `EMBEDDING_DIM` 차원 벡터로 변환합니다 (pgvector 저장용)."""

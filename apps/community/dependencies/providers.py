@@ -1,11 +1,9 @@
 from __future__ import annotations
 
 import os
+from functools import lru_cache
 
-from fastapi import Depends
-from sqlalchemy.ext.asyncio import AsyncSession
-
-from community.adapter.outbound.llama_content_filter_client import LlamaContentFilterClient
+from community.adapter.outbound.kcelectra_content_filter_client import KcElectraContentFilterClient
 from community.adapter.outbound.n8n_email_client import N8nEmailClient
 from community.adapter.outbound.repositories.juso_contact_repository import JusoContactRepository
 from community.app.ports.input.community_host_use_case import CommunityHostUseCase
@@ -22,13 +20,17 @@ from community.app.use_cases.email_host_interactor import EmailHostInteractor
 from community.app.use_cases.juso_interactor import JusoInteractor
 from community.app.use_cases.send_email_interactor import SendEmailInteractor
 from community.app.use_cases.telegram_interactor import TelegramInteractor
+from fastapi import Depends
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from database import get_db
 
 _DEFAULT_WEBHOOK = "http://localhost:5678/webhook/community-email"
 
 
+@lru_cache
 def get_content_filter_port() -> ContentFilterPort:
-    return LlamaContentFilterClient()
+    return KcElectraContentFilterClient()
 
 
 def get_send_email_use_case() -> SendEmailUseCase:
