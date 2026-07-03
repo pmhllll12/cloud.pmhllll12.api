@@ -43,7 +43,11 @@ async def analyze_image(
         raise HTTPException(status_code=503, detail=str(exc)) from exc
 
     return AnalyzeImageResponse(
-        ok=result.ok, caption=result.caption, tags=result.tags, message=result.message
+        ok=result.ok,
+        caption=result.caption,
+        tags=result.tags,
+        image_url=result.image_url,
+        message=result.message,
     )
 
 
@@ -59,6 +63,7 @@ async def get_analyzed_logs(
             filename=log.filename,
             caption=log.caption,
             tags=log.tags,
+            image_url=log.image_url,
         )
         for log in logs
     ]

@@ -15,4 +15,5 @@ class AnalyzedImageOrm(Base):
     filename: Mapped[str] = mapped_column(String(500), default="")
     caption: Mapped[str] = mapped_column(Text, default="")
     tags: Mapped[list[str]] = mapped_column(ARRAY(String(100)), default=list)
+    image_key: Mapped[str] = mapped_column(String(1024), default="")
     analyzed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))

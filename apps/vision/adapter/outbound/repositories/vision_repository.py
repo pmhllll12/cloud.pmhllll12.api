@@ -5,7 +5,7 @@ from datetime import datetime
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from vision.app.dtos.vision_dto import AnalyzedImageLog
+from vision.app.dtos.vision_dto import StoredImage
 from vision.app.ports.output.vision_port import VisionPort
 
 logger = logging.getLogger(__name__)
@@ -22,6 +22,7 @@ class VisionRepository(VisionPort):
         filename: str,
         caption: str,
         tags: list[str],
+        image_key: str,
         analyzed_at: datetime,
     ) -> None:
         from vision.adapter.outbound.orm.vision_orm import AnalyzedImageOrm
@@ -30,13 +31,14 @@ class VisionRepository(VisionPort):
             filename=filename,
             caption=caption,
             tags=tags,
+            image_key=image_key,
             analyzed_at=analyzed_at,
         )
         self.session.add(row)
         await self.session.commit()
         logger.info("[VisionRepository] save filename=%r id=%s", filename, row.id)
 
-    async def list_recent(self, limit: int = 100) -> list[AnalyzedImageLog]:
+    async def list_recent(self, limit: int = 100) -> list[StoredImage]:
         from vision.adapter.outbound.orm.vision_orm import AnalyzedImageOrm
 
         stmt = (
@@ -46,11 +48,12 @@ class VisionRepository(VisionPort):
         )
         rows = (await self.session.execute(stmt)).scalars().all()
         return [
-            AnalyzedImageLog(
+            StoredImage(
                 analyzed_at=row.analyzed_at.isoformat(),
                 filename=row.filename,
                 caption=row.caption,
                 tags=list(row.tags or []),
+                image_key=row.image_key,
             )
             for row in rows
         ]

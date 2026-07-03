@@ -7,6 +7,7 @@ class AnalyzeImageResponse(BaseModel):
     ok: bool
     caption: str
     tags: list[str]
+    image_url: str
     message: str = "analyzed"
 
 
@@ -15,3 +16,4 @@ class AnalyzedImageLogEntry(BaseModel):
     filename: str
     caption: str
     tags: list[str]
+    image_url: str
